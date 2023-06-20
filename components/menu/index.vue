@@ -9,12 +9,15 @@
       <MenuLink href="/" v-if="!isLoggedIn">Sign In</MenuLink>
       <MenuLink to="/signup" v-if="!isLoggedIn">Sign Up</MenuLink>
       <MenuLink to="/dashboard" v-if="isLoggedIn">Dashboard</MenuLink>
+      <button @click="logOut" v-if="isLoggedIn" class="text-gray-50 font-semibold text-xl bg-purple-800 hover:bg-purple-900 p-2  rounded-md ">Sign out</button>
       
     </div>
   </header>
 </template>
 
 <script setup>
+  const { logOut } = useAuth()
+
   
   const isLoggedIn = useState('loginState', () => false)
   
