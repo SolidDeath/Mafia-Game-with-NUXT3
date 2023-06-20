@@ -1,11 +1,6 @@
-import firebaseServer from "../utils/firebaseServer";
-import {getAuth} from 'firebase-admin/auth'
-
-
 /*
     This is a helper function that takes a request object containing a user token, authenticates the server and saves a session cookie on the client
 
-    The file automatically only accepts post requests because of the file name (login.post.js)
 */
 export default defineEventHandler(async (event) => {    
     /*
