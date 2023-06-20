@@ -7,7 +7,7 @@ export default function useAuth(){
         password: null,
         name: null
     })
-    useFirebase()
+    useFirebaseClient()
     const auth = getAuth()
 
     function signIn({email,password}){

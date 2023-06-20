@@ -1,0 +1,26 @@
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD_j0EN4okFX_fNCb3SPsPSYMXxLqgO42E",
+  authDomain: "nuxt-auth-8cf00.firebaseapp.com",
+  projectId: "nuxt-auth-8cf00",
+  storageBucket: "nuxt-auth-8cf00.appspot.com",
+  messagingSenderId: "992986381893",
+  appId: "1:992986381893:web:5f535956c92830c9456d2c"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
+
+export default function useFirebaseClient() {
+    const auth = getAuth(app)
+    return {
+        app,
+        auth,
+        firestore
+    }
+}

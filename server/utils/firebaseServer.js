@@ -1,6 +1,7 @@
 import { initializeApp, cert, getApps } from 'firebase-admin/app'
+import {getFirestore} from 'firebase-admin/firestore'
 
-const configs = {
+const firebaseServerConfig = {
     "type": "service_account",
     "project_id": "nuxt-auth-8cf00",
     "private_key_id": "598eb6122727756a6078b3149d91ec743e332aac",
@@ -16,10 +17,15 @@ const configs = {
   
 
   export default function firebaseServer(){
-
+    let app;
     if(getApps().length == 0){ //check if firebase app is already initialized
-        initializeApp({
-            credential: cert(configs),
+        app = initializeApp({
+            credential: cert(firebaseServerConfig),
         })
+      }
+    const firestore = getFirestore(app);
+    return {
+      app, firestore
     }
+
   }

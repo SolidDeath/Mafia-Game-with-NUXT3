@@ -9,11 +9,12 @@ import {getAuth} from 'firebase-admin/auth'
 */
 export default defineEventHandler(async (event) => {
 
-    firebaseServer() // initialize firebase app on server
+    const {app} = firebaseServer() // initialize firebase app on server
     const { token } = await readBody(event)
     const auth = getAuth()
     const expiresIn = 60 * 60 * 24 * 5 * 100 // 5 days
 
+    
     /*
         RESPONSES GO BACK TO composables/useAuth.js
     */
@@ -21,8 +22,8 @@ export default defineEventHandler(async (event) => {
         const options = { //options for the cookie
             maxAge: expiresIn,
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', //if in production, secure the cookie //TODO: learn more about this
-            path: '/'
+            secure: true, //if in production, secure the cookie //TODO: learn more about this
+            sameSite: 'none'
         }
         const authCookie = await getAuth().createSessionCookie(token, { expiresIn }) //get a session cookie from firebase admin
     
