@@ -13,7 +13,6 @@ export default function useAuth(){
     function signIn({email,password}){
         resetErrors()
         const validatedData = useAuthValidator({email, password}, 'login')
-        console.log(validatedData);
         setPersistence(auth, browserLocalPersistence).then(() => {
             signInWithEmailAndPassword(auth, email, password).then(userDetails => {
                 user.value = userDetails.user
@@ -24,10 +23,22 @@ export default function useAuth(){
         })
     }
 
-    function logout(){ //have to send a request to server to log the user out (invalidate) and then delete the session cookie
-        auth.signOut().then(() => {
-            //TODO: add signout logic
+    function logOut(){ //have to send a request to server to log the user out (invalidate) and then delete the session cookie
+        const token = user.uid
+        signOut(auth).then(() => {
+            $fetch("api/logout",  { //passes the token to the server though an api route for more information see server/api/login.post.js
+                method: "POST", 
+                body: JSON.stringify({ token })
+            }).then(res => {
+                if(res.statusCode == 200){
+                    navigateTo('/')
+                }
+            }).catch(err => {
+                alert("LogoutError: ", err.message)
+            })
         })
+
+
     }
     //TODO: 23:00 fix variables
     function signUp({email, password , name}){
@@ -79,7 +90,7 @@ export default function useAuth(){
 
 
 
-    return { user, signIn, logout, signUp, errorBag }
+    return { user, signIn, logOut, signUp, errorBag }
 }
 
 
