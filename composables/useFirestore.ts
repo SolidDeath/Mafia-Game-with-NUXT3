@@ -27,7 +27,10 @@ export default function useFirestore(collectionName: string, docId?: string, ){ 
     
         let colRef = collection(firestore, collectionName)
         let docRef
-        if (docId) {
+        if(!docId && queryObj){
+            docRef = query(colRef, where(queryObj.field, queryObj.operator, queryObj.value))
+        }
+        else if (docId) {
           docRef = doc(colRef, docId)
           if (subcollection) {
             colRef = collection(docRef, subcollection)
