@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
             secure: true, //if in production, secure the cookie //TODO: learn more about this
             sameSite: 'none'
         }
-        const authCookie = await getAuth().createSessionCookie(token, { options }) //get a session cookie from firebase admin
+        const authCookie = await getAuth().createSessionCookie(token, { expiresIn }) //get a session cookie from firebase admin
     
         setCookie(event, 'authCookie', authCookie, options) // If someone passes an invalid token, it will throw an error, therefore the whole thing has to be inside of a try-catch block
         return { //if cookie is set successfully, return a success message
