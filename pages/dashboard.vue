@@ -24,7 +24,6 @@
                 <p>
                     User: {{ user }}
                 </p>
-                <!-- <h1>User Data: {{ userData }}</h1> -->
             </div>
         </div>
     </NuxtLayout>
@@ -32,19 +31,19 @@
 
 <script setup>
     const { user } = useAuth()
+    const { getData } = useFirestore()
 
-    
     definePageMeta({
         middleware: ['auth']
     })
 
     import highlightjs from "highlight.js"
     const form = reactive({
-    title: "",
-    site: "",
-    type: "",
-    description: "",
-    url: "",
+        title: "",
+        site: "",
+        type: "",
+        description: "",
+        url: "",
     })
 
     const codeele = ref()
