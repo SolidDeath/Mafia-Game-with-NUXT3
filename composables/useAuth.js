@@ -1,6 +1,10 @@
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
+import { doc , serverTimestamp, setDoc } from "firebase/firestore";
 
 export default function useAuth(){
+    const { firestore } = useFirebaseClient()
+
+
     const user = useState('userStore', () => ({}))
     const errorBag = ref({
         email: null,
@@ -44,13 +48,39 @@ export default function useAuth(){
     function signUp({email, password , name}){
         resetErrors()
         const validatedData = useAuthValidator({email, password, name}, 'signup')
-        console.log(validatedData);
+        console.log("Validated data: ", validatedData);
         setPersistence(auth, browserLocalPersistence).then(() => {
             createUserWithEmailAndPassword(auth, email, password).then(userDetails => {
                 user.value = userDetails.user
-                userDetails.user.getIdToken().then(token => {
-                    serverAuth(token)
+                userDetails.user.getIdToken().then(async token => {
+                    // Create a user document in the database
+                    console.log("User: ", user.value.uid);
+                    try{
+                        await setDoc(doc(firestore, "users", user.value.uid), {
+                            uid: user.value.uid,
+                            name: name,
+                            email: email,
+                            accessLevel: 1,
+                            createdAt: serverTimestamp()
+                        })
+                    }
+                    catch(err){
+                        throw createError({
+                            statusCode: 500,
+                            message: 'Failed to create user document: ' + err
+                        })
+                    }
 
+
+                    try{
+                        serverAuth(token) //Creates a session cookie on the server and sends it back to the client
+                    }
+                    catch(err){
+                        throw createError({
+                            statusCode: 500,
+                            message: 'Failed to create session cookie: ' + err
+                        })
+                    }
 
                 })
             })

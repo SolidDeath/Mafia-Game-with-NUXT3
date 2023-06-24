@@ -20,11 +20,20 @@
                     </code>
                 </pre>
             </div>
+            <div class="w-20">
+                <p>
+                    User: {{ user }}
+                </p>
+                <!-- <h1>User Data: {{ userData }}</h1> -->
+            </div>
         </div>
     </NuxtLayout>
 </template>
 
 <script setup>
+    const { user } = useAuth()
+
+    
     definePageMeta({
         middleware: ['auth']
     })
@@ -52,8 +61,8 @@
     })
 
     const code = reactive({
-    actual: "",
-    highlighted: "",
+        actual: "",
+        highlighted: "",
     })
 
     const buttonText = ref("Copy")
