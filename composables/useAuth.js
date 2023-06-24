@@ -3,7 +3,7 @@ import { doc , serverTimestamp, setDoc } from "firebase/firestore";
 
 export default function useAuth(){
     const { firestore } = useFirebaseClient()
-
+    const { addDocument } = useFirestore()
 
     const user = useState('userStore', () => ({}))
     const errorBag = ref({

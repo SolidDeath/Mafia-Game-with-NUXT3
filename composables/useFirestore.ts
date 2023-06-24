@@ -1,71 +1,116 @@
-import { updateDoc, serverTimestamp, collection,getDoc, getDocs, doc, addDoc, setDoc, query, where, onSnapshot} from "firebase/firestore";
+import { updateDoc, serverTimestamp, collection,getDoc, getDocs, doc, addDoc, setDoc, query, where, onSnapshot, deleteDoc} from "firebase/firestore";
 import { ref } from "vue";
 const {app, auth, firestore } = useFirebaseClient()
 
 //TODO: Add error handling
-export default function useFirestore(collectionName: string, docId?: string, ){ // getDoc is true by default
+export default function useFirestore(){ // getDoc is true by default
     // const docPath = collectionName + '/' + docId // path to the document
     // const docRef = doc(firestore, docPath) // reference to the document
-    type whereObject = {
-        field: string; 
-        operator: string, 
-        value: string
+  type whereObject = {
+    field: string; 
+    operator: string, 
+    value: string
+  }
+
+
+  const getData = async (collectionName: string, docId?: string, subcollection?: string, queryObj?: whereObject) => {
+    const returnedData = ref([])
+    const error = ref(null)
+
+    try {
+        let queryRef;
+
+        // Case 1: A document ID is not provided, we're fetching the whole collection
+        if (!docId) {
+            let colRef = collection(firestore, collectionName);
+
+            // If a query object is provided, use it to filter the collection
+            if (queryObj) {
+                queryRef = query(colRef, where(queryObj.field, queryObj.operator, queryObj.value));
+            } else {
+                queryRef = colRef;
+            }
+
+            // Subscribe to changes in the data
+            const unsub = onSnapshot(queryRef, (snap) => {
+                let updatedData = []
+                snap.forEach((doc) => {
+                    updatedData.push({ ...doc.data(), id: doc.id })
+                })
+                returnedData.value = updatedData
+            }, (err) => {
+                // Handle any errors
+                error.value = err.message
+            })
+
+            watchEffect((onInvalidate) => {
+                onInvalidate(() => unsub()); // Unsubscribe from Firestore listener
+            })
+
+        } else {
+            // Case 2: A document ID is provided, we're fetching a specific document or a subcollection of that document
+            let docRef = doc(firestore, collectionName, docId);
+
+            // If a subcollection is provided, fetch it
+            if (subcollection) {
+                let subColRef = collection(docRef, subcollection);
+
+                // If a query object is provided, use it to filter the subcollection
+                if (queryObj) {
+                    queryRef = query(subColRef, where(queryObj.field, queryObj.operator, queryObj.value));
+                } else {
+                    queryRef = subColRef;
+                }
+
+                // Subscribe to changes in the data
+                const unsub = onSnapshot(queryRef, (snap) => {
+                    let updatedData = []
+                    snap.forEach((doc) => {
+                        updatedData.push({ ...doc.data(), id: doc.id })
+                    })
+                    returnedData.value = updatedData
+                }, (err) => {
+                    // Handle any errors
+                    error.value = err.message
+                })
+
+                watchEffect((onInvalidate) => {
+                    onInvalidate(() => unsub()); // Unsubscribe from Firestore listener
+                })
+
+            } else {
+                // If no subcollection is provided, fetch the specific document
+                queryRef = docRef;
+
+                // Subscribe to changes in the data
+                const unsub = onSnapshot(queryRef, (snap) => {
+                    if (snap.exists()) {
+                        returnedData.value = { ...snap.data(), id: snap.id }
+                    } else {
+                        error.value = "No document exists";
+                    }
+                }, (err) => {
+                    // Handle any errors
+                    error.value = err.message
+                })
+
+                watchEffect((onInvalidate) => {
+                    onInvalidate(() => unsub()); // Unsubscribe from Firestore listener
+                })
+            }
+        }
+    } catch (error) {
+        // Handle any errors that occur during execution
+        throw createError({statusCode: 500, message: "Failed to " + error})
     }
 
-
-    const getData = async (subcollection?: string, queryObj?: whereObject) => {
-
-        const returnedData = ref([])
-        const error = ref(null)
-        const cache = new Map() // Simple caching mechanism
-        //TODO, add a cache invalidation mechanism and figure out how to use firebase's cache (has to be enabled in useFirebaseClient.js) https://firebase.google.com/docs/firestore/manage-data/enable-offline
-
-        if(cache.has(collectionName + docId + subcollection)) {
-          returnedData.value = cache.get(collectionName + docId + subcollection)
-          return
-        }
-    
-        let colRef = collection(firestore, collectionName)
-        let docRef
-        if(!docId && queryObj){
-            docRef = query(colRef, where(queryObj.field, queryObj.operator, queryObj.value))
-        }
-        else if (docId) {
-          docRef = doc(colRef, docId)
-          if (subcollection) {
-            colRef = collection(docRef, subcollection)
-            if (queryObj) {
-              docRef = query(colRef, where(queryObj.field, queryObj.operator, queryObj.value))
-            }
-          }
-        }
-    
-        const unsub = onSnapshot(
-          docRef,
-          (snap) => {
-            let updatedData = []
-            snap.forEach((doc) => {
-              updatedData.push({ ...doc.data(), id: doc.id })
-            })
-            returnedData.value = updatedData
-            cache.set(collectionName + docId + subcollection, updatedData) // set the data in cache
-          },
-          (err) => {
-            error.value = err.message
-          }
-        )
-    
-        watchEffect((onInvalidate) => {
-          onInvalidate(() => {
-            if (unsub) {
-              unsub() // unsubscribe from Firestore listener
-            }
-          })
-        })
-      }
+    // Return the data, error
+    return { data: returnedData, error }
+}
 
 
-    async function addDocument(data: object){
+  async function addDocument(collectionName: string, data: object, docId?: string){
+    try {
         if(docId){
             const docRef = doc(firestore, collectionName, docId)
             await setDoc(docRef, {
@@ -79,21 +124,42 @@ export default function useFirestore(collectionName: string, docId?: string, ){ 
                 createdAt: serverTimestamp()
             })
         }
+    } catch (error) {
+        throw createError({statusCode: 500, message: "Failed to " + error})
     }
+  }
 
 
 
-    async function updateDocument(collectionName: string, docId: string, data: Object){
-
+  async function updateDocument(collectionName: string, docId: string, data: Object, subcollection?: string, subDocId?: string){
+    try {
+        let docRef
+        if (subcollection && subDocId) {
+            let parentDocRef = doc(firestore, collectionName, docId);
+            docRef = doc(parentDocRef, subcollection, subDocId);
+        } else {
+            docRef = doc(firestore, collectionName, docId);
+        }
+        await updateDoc(docRef, data);
+    } catch (error) {
+        throw createError({statusCode: 500, message: "Failed to update the document: " + error})
     }
+  }
 
-    async function deleteDocument(){
-
+  async function deleteDocument(collectionName: string, docId: string, subcollection?: string, subDocId?: string){
+    try {
+        let docRef
+        if (subcollection && subDocId) {
+            let parentDocRef = doc(firestore, collectionName, docId);
+            docRef = doc(parentDocRef, subcollection, subDocId);
+        } else {
+            docRef = doc(firestore, collectionName, docId);
+        }
+        await deleteDoc(docRef);
+    } catch (error) {
+        throw createError({statusCode: 500, message: "Failed to delete the document: " + error})
     }
-
-    async function getCollection(){
-
-    }
+  }
 
    
     return {addDocument, updateDocument, deleteDocument, getData }
