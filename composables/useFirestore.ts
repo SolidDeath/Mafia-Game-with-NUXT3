@@ -12,7 +12,7 @@ export default function useFirestore(){ // getDoc is true by default
     value: string
   }
 
-  const getData = async (collectionName: string, docId?: string, subcollection?: string, queryObj?: whereObject) => {
+  const getData = async (collectionName: string, docId?: string, subcollection?: string, subDocId?: string, queryObj?: whereObject) => {
     const returnedData = ref([])
     const error = ref(null)
 
@@ -54,31 +54,52 @@ export default function useFirestore(){ // getDoc is true by default
             if (subcollection) {
                 let subColRef = collection(docRef, subcollection);
 
-                // If a query object is provided, use it to filter the subcollection
-                if (queryObj) {
-                    queryRef = query(subColRef, where(queryObj.field, queryObj.operator, queryObj.value));
-                } else {
-                    queryRef = subColRef;
-                }
+                // Case 2.1: A subdocument ID is provided, we're fetching a specific document in a subcollection
+                if (subDocId) {
+                    queryRef = doc(subColRef, subDocId);
 
-                // Subscribe to changes in the data
-                const unsub = onSnapshot(queryRef, (snap) => {
-                    let updatedData = []
-                    snap.forEach((doc) => {
-                        updatedData.push({ ...doc.data(), id: doc.id })
+                    // Subscribe to changes in the data
+                    const unsub = onSnapshot(queryRef, (snap) => {
+                        if (snap.exists()) {
+                            returnedData.value = { ...snap.data(), id: snap.id }
+                        } else {
+                            error.value = "No document exists";
+                        }
+                    }, (err) => {
+                        // Handle any errors
+                        error.value = err.message
                     })
-                    returnedData.value = updatedData
-                }, (err) => {
-                    // Handle any errors
-                    error.value = err.message
-                })
 
-                watchEffect((onInvalidate) => {
-                    onInvalidate(() => unsub()); // Unsubscribe from Firestore listener
-                })
+                    watchEffect((onInvalidate) => {
+                        onInvalidate(() => unsub()); // Unsubscribe from Firestore listener
+                    })
+                } else {
+                    // Case 2.2: No subdocument ID is provided, we're fetching the whole subcollection
+                    // If a query object is provided, use it to filter the subcollection
+                    if (queryObj) {
+                        queryRef = query(subColRef, where(queryObj.field, queryObj.operator, queryObj.value));
+                    } else {
+                        queryRef = subColRef;
+                    }
 
+                    // Subscribe to changes in the data
+                    const unsub = onSnapshot(queryRef, (snap) => {
+                        let updatedData = []
+                        snap.forEach((doc) => {
+                            updatedData.push({ ...doc.data(), id: doc.id })
+                        })
+                        returnedData.value = updatedData
+                    }, (err) => {
+                        // Handle any errors
+                        error.value = err.message
+                    })
+
+                    watchEffect((onInvalidate) => {
+                        onInvalidate(() => unsub()); // Unsubscribe from Firestore listener
+                    })
+                }
             } else {
-                // If no subcollection is provided, fetch the specific document
+                // Case 3: No subcollection is provided, fetch the specific document
                 queryRef = docRef;
 
                 // Subscribe to changes in the data
@@ -106,6 +127,7 @@ export default function useFirestore(){ // getDoc is true by default
     // Return the data, error
     return { data: returnedData, error }
 }
+
 
 
   async function addDocument(collectionName: string, data: object, docId?: string){

@@ -39,15 +39,25 @@
 </template>
 
 <script setup>
-    const { user } = useAuth()
-
-    const animals = await useFetch('api/firestore/animals')
-    const dog = await useFetch('api/firestore/animals/dog')
-    const dogsFriends = await useFetch('api/firestore/animals/dog/friends')
-    const terry = await useFetch('api/firestore/animals/dog/friends/terry')
-
     definePageMeta({
         middleware: ['auth']
+    })
+
+
+
+    const { user } = useAuth()
+
+    const animals = ref(await useFetch('api/firestore/animals'))
+    const dog = ref(await useFetch('api/firestore/animals/dog'))
+    const dogsFriends = ref(await useFetch('api/firestore/animals/dog/friends'))
+    const terry = ref(await useFetch('api/firestore/animals/dog/friends/terry'))
+
+    onMounted(async() => {
+        const { getData } = useFirestore()
+        animals.value = await getData('animals')
+        dog.value = await getData('animals', 'dog')
+        dogsFriends.value = await getData('animals', 'dog', 'friends')
+        terry.value = await getData('animals', 'dog', 'friends', 'johnny')
     })
 
     import highlightjs from "highlight.js"
