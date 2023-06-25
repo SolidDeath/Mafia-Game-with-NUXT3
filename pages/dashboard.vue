@@ -25,13 +25,26 @@
                     User: {{ user }}
                 </p>
             </div>
-
+            <div>
+                <p>Animals: {{ animals }}</p>
+                <br>
+                <p>DAWG: {{ dog }}</p>
+                <br>
+                <p>DAWG's Friends: {{ dogsFriends }}</p>
+                <br>
+                <p>Terry: {{ terry }}</p>
+            </div>
         </div>
     </NuxtLayout>
 </template>
 
 <script setup>
     const { user } = useAuth()
+
+    const animals = await useFetch('api/firestore/animals')
+    const dog = await useFetch('api/firestore/animals/dog')
+    const dogsFriends = await useFetch('api/firestore/animals/dog/friends')
+    const terry = await useFetch('api/firestore/animals/dog/friends/terry')
 
     definePageMeta({
         middleware: ['auth']
