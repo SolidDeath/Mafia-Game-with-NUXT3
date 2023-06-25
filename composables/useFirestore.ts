@@ -12,7 +12,6 @@ export default function useFirestore(){ // getDoc is true by default
     value: string
   }
 
-
   const getData = async (collectionName: string, docId?: string, subcollection?: string, queryObj?: whereObject) => {
     const returnedData = ref([])
     const error = ref(null)

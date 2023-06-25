@@ -25,6 +25,7 @@
                     User: {{ user }}
                 </p>
             </div>
+
         </div>
     </NuxtLayout>
 </template>
@@ -32,7 +33,6 @@
 <script setup>
     const { user } = useAuth()
     const { getData } = useFirestore()
-
     definePageMeta({
         middleware: ['auth']
     })
