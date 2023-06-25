@@ -21,6 +21,7 @@
                 </pre>
             </div>
 
+
         </div>
     </NuxtLayout>
 </template>
@@ -29,8 +30,6 @@
     definePageMeta({
         middleware: ['auth']
     })
-
-
 
    
 
