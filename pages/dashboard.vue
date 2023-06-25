@@ -21,18 +21,6 @@
                 </pre>
             </div>
 
-            <div>
-                <p>Animals: {{ animals }}</p>
-                <br>
-                <p>DAWG: {{ dog }}</p>
-                <br>
-                <p>DAWG's Friends: {{ dogsFriends }}</p>
-                <br>
-                <p>Terry: {{ terry }}</p>
-            </div>
-            <button @click="updateDog">Update Bob</button>
-            <button @click="addFriend">Add Friend</button>
-            <button @click="deleteFriend">Delete Friend</button>
         </div>
     </NuxtLayout>
 </template>
@@ -44,55 +32,7 @@
 
 
 
-    const { user } = useAuth()
-    // Server side fetch
-    const animals = ref(await useFetch('api/firestore/animals'))
-    const dog = ref(await useFetch('api/firestore/animals/dog'))
-    const dogsFriends = ref(await useFetch('api/firestore/animals/dog/friends'))
-    const terry = ref(await useFetch('api/firestore/animals/dog/friends/terry'))
-
-    // Client side fetch
-    onMounted(async() => {
-        const { getData, updateDocument } = useFirestore()
-        animals.value = await getData('animals')
-        dog.value = await getData('animals', 'dog')
-        dogsFriends.value = await getData('animals', 'dog', 'friends')
-        terry.value = await getData('animals', 'dog', 'friends', 'johnny')
-
-
-
-    })
-    const updateDog = async() => {
-        console.log('update dog');
-        const { updateDocument } = useFirestore()
-        await updateDocument('animals', 'dog', 
-            {
-                address: 'Bobstreet 1',
-                age:  2,
-            },
-            'friends',
-            'terry'
-        ).catch(err => console.log(err))
-    }
-
-    const addFriend = async() => {
-        console.log('add friend');
-        const { addDocument } = useFirestore()
-        await addDocument('animals',   {
-                address: 'Bobstreet 1',
-                age:  4,
-            },
-            'dog', 
-            'friends',
-            'Bob'
-        ).catch(err => console.log(err))
-    }
-    
-    const deleteFriend = async() => {
-        console.log('delete friend');
-        const { deleteDocument } = useFirestore()
-        await deleteDocument('animals', 'dog', 'friends', 'Bob').catch(err => console.log(err))
-    }
+   
 
 
 
