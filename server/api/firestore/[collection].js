@@ -1,4 +1,4 @@
-import useFirebaseServer from "../../../composables/useFirebaseServer";
+import useFirebaseServer from "~/composables/useFirebaseServer";
 
 // Handles the event of fetching a whole collection from Firestore
 export default defineEventHandler(async (event) => {

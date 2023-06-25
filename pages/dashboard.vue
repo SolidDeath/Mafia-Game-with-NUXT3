@@ -32,7 +32,7 @@
 
 <script setup>
     const { user } = useAuth()
-    const { getData } = useFirestore()
+
     definePageMeta({
         middleware: ['auth']
     })

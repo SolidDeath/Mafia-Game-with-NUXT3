@@ -1,4 +1,4 @@
-import useFirebaseServer from "../../../composables/useFirebaseServer";
+import useFirebaseServer from "~/composables/useFirebaseServer";
 
 
 // Handles the event of fetching a specific document from a subcollection in Firestore
