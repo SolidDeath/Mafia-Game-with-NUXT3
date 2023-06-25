@@ -130,25 +130,47 @@ export default function useFirestore(){ // getDoc is true by default
 
 
 
-  async function addDocument(collectionName: string, data: object, docId?: string){
+async function addDocument(collectionName: string, data: object, docId?: string, subcollection?: string, subDocId?: string) {
     try {
-        if(docId){
-            const docRef = doc(firestore, collectionName, docId)
-            await setDoc(docRef, {
-                ...data,
-                createdAt: serverTimestamp()
-            })
-        }
-        else{
+        if(docId) {
+            const docRef = doc(firestore, collectionName, docId);
+
+            // If a subcollection is specified, we'll add a document to it
+            if(subcollection) {
+                const subColRef = collection(docRef, subcollection);
+
+                // If a subdocument ID is specified, we'll set the document with that ID
+                if (subDocId) {
+                    const subDocRef = doc(subColRef, subDocId);
+                    await setDoc(subDocRef, {
+                        ...data,
+                        createdAt: serverTimestamp()
+                    });
+                } else {
+                    // If no subdocument ID is specified, we'll add a new document
+                    await addDoc(subColRef, {
+                        ...data,
+                        createdAt: serverTimestamp()
+                    });
+                }
+            } else {
+                // If no subcollection is specified, we'll update the main document
+                await setDoc(docRef, {
+                    ...data,
+                    createdAt: serverTimestamp()
+                });
+            }
+        } else {
+            // If no document ID is specified, we'll add a new document to the main collection
             const docRef = await addDoc(collection(firestore, collectionName), {
                 ...data,
                 createdAt: serverTimestamp()
-            })
+            });
         }
     } catch (error) {
-        throw createError({statusCode: 500, message: "Failed to " + error})
+        throw createError({statusCode: 500, message: "Failed to " + error});
     }
-  }
+}
 
 
 

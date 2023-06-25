@@ -1,4 +1,4 @@
-import useFirebaseServer from "../../server/utils/firebaseServer"
+import useFirebaseServer from "~/composables/useFirebaseServer";
 import { getAuth } from "firebase-admin/auth";
 // import {setCookie} from 'h3' //have to import in case of an error (in case nuxt doesn't import it)
 
