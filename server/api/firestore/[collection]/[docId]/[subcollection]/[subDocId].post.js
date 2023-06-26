@@ -1,30 +1,28 @@
-import useFirebaseServer from "~/composables/useFirebaseServer";
-import { doc, setDoc } from "firebase/firestore";
+import useFirebaseServer from "~/server/utils/useFirebaseServer";
 
 export default defineEventHandler(async (event) => {
     // Initialize Firestore
     const { firestore } = useFirebaseServer();
   
-    // Extract the collection, docId, subcollection, and subdocId from the context params
-    const { collection: collectionName, docId, subcollection, subdocId } = event.context.params;
-  
-    // Extract the body from the event
-    const data = JSON.parse(event.body);
+    // Extract the parameters from the request
+    const { collection: collectionName, docId, subcollection, subDocId } = event.context.params;
+    const DATA = await readBody(event);
+    console.log("DATA",DATA);
   
     try {
-      // Set a document in a subcollection with a custom ID
-      const docRef = doc(firestore, collectionName, docId, subcollection, subdocId);
-      await setDoc(docRef, data);
+      // Add a new document with a custom ID
+      const docRef = firestore.collection(collectionName).doc(docId).collection(subcollection).doc(subDocId);
+      await docRef.set(DATA);
   
       return {
         statusCode: 200,
-        message: `Document successfully written!`
+        message: 'Document successfully written!'
       };
     } catch (err) {
       throw createError({
         statusCode: 500,
-        message: 'DOCUMENT_WRITE_FAILED'
+        message: 'DOCUMENT_WRITE_FAILED',
+        error: err.message, // Add the actual error message here
       });
     }
-  });
-  
+});

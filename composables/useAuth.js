@@ -1,5 +1,6 @@
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
-import { doc , serverTimestamp, setDoc } from "firebase/firestore";
+import { FieldValue, serverTimestamp } from "firebase/firestore";
+const { getData } = useFirestore()
 
 export default function useAuth(){
     const { firestore } = useFirebaseClient()
@@ -20,8 +21,16 @@ export default function useAuth(){
         setPersistence(auth, browserLocalPersistence).then(() => {
             signInWithEmailAndPassword(auth, email, password).then(userDetails => {
                 user.value = userDetails.user
-                userDetails.user.getIdToken().then(token => {
+                userDetails.user.getIdToken().then(async token => {
                     serverAuth(token)
+                    console.log("User from firebase: ", user.value.uid);
+                    const userDoc = await getData('users', user.value.uid)
+                    console.log("User doc: ", userDoc);
+                    user.value = {...user.value, ...userDoc}
+                    console.log("User during signup: ", user.value);
+                    // if(!userDoc.exists()){
+                    //     navigateTo('/')
+                    // }
                 })
             })
         })
@@ -57,20 +66,13 @@ export default function useAuth(){
                     // Create a user document in the database
                     console.log("User: ", user.value.uid);
                     try{
-                        // await setDoc(doc(firestore, "users", user.value.uid), {
-                        //     uid: user.value.uid,
-                        //     name: name,
-                        //     email: email,
-                        //     accessLevel: 1,
-                        //     createdAt: serverTimestamp()
-                        // })
-                        await addDocServe('users', {
+                        await addDocServe('users',{
                                 uid: user.value.uid,
                                 name: name,
                                 email: email,
                                 accessLevel: 1,
-                                createdAt: serverTimestamp()
-                        })
+                        }, user.value.uid)
+
                     }
                     catch(err){
                         throw createError({

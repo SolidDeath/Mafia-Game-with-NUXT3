@@ -2,6 +2,7 @@
     Sends a request to checkauthstatus, waits for the response and redirects the user to the login page if the response is 401
 */
 
+
 export default defineNuxtRouteMiddleware( async (to, from) => {
     if(process.server){ //make sure this is only run on the server
         const cookie = useCookie('authCookie') //cookie is made in login.post.js
