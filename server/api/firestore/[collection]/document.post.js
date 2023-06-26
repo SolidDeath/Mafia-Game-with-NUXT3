@@ -1,5 +1,4 @@
-import useFirebaseServer from "~/composables/useFirebaseServer";
-import { collection, addDoc } from "firebase/firestore";
+import useFirebaseServer from "~/server/utils/useFirebaseServer";
 
 export default defineEventHandler(async (event) => {
     // Initialize Firestore
@@ -9,24 +8,26 @@ export default defineEventHandler(async (event) => {
     const { collection: collectionName } = event.context.params;
   
     // Extract the body from the event
-    const DATA = JSON.parse(event.body);
-  
+    const DATA = await readBody(event);
+
     try {
       // Add a new document with an auto-generated ID
-      const collectionRef = collection(firestore, collectionName);
-      const docRef = await addDoc(collectionRef, DATA);
+      const colRef = firestore.collection(collectionName)
+      let res = await colRef.add({
+        ...DATA
+        //TODO - add timestamp to all collections,  timestamp: FieldValue.serverTimestamp() did not work
+      })
   
       return {
         statusCode: 200,
-        message: `Document successfully written with ID: ${docRef.id}`
+        message: `Document successfully written with ID: ${res.id}`
       };
     } catch (err) {
+      console.error(err);
       throw createError({
         statusCode: 500,
-        message: 'DOCUMENT_WRITE_FAILED'
+        message: 'DOCUMENT_WRITE_FAILED',
+        error: err.message, // Add the actual error message here
       });
     }
-  });
-  
-
-  
+});

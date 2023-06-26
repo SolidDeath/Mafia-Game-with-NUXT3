@@ -1,4 +1,4 @@
-import useFirebaseServer from "~/composables/useFirebaseServer";
+import useFirebaseServer from "~/server/utils/useFirebaseServer";
 import {getAuth} from 'firebase-admin/auth'
 
 

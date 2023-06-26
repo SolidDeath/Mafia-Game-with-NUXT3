@@ -15,24 +15,24 @@ export default function addDocServer() {
                     endpoint += '/' + subcollection;
                     if (subDocId) {
                         endpoint += '/' + subDocId;
+                    } else{
+                        endpoint += '/document';
                     }
                 }
+            } else{
+                endpoint += '/document';
             }
-        
-            const response = await fetch(endpoint, {
+            console.log("This is the API endpoint: ", endpoint);
+            
+            const response = await $fetch(endpoint, {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
         
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-        
-            const responseData = await response.json();
-            return { data: responseData, error: null };
+            return { data: response, error: null };
         } catch (error) {
             return { data: null, error };
         }
@@ -40,6 +40,5 @@ export default function addDocServer() {
     
     return { addDocServe }
 }
-
 
   
