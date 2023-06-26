@@ -1,10 +1,9 @@
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
-import { FieldValue, serverTimestamp } from "firebase/firestore";
-const { getData } = useFirestore()
+
 
 export default function useAuth(){
-    const { firestore } = useFirebaseClient()
-    const { addDocument } = useFirestore()
+    const { firestore: firestoreClient, auth } = useFirebaseClient()
+    const { getData } = useFirestore()
 
     const user = useState('userStore', () => ({}))
     const errorBag = ref({
@@ -13,7 +12,6 @@ export default function useAuth(){
         name: null
     })
     useFirebaseClient()
-    const auth = getAuth()
 
     function signIn({email,password}){
         resetErrors()
@@ -23,14 +21,15 @@ export default function useAuth(){
                 user.value = userDetails.user
                 userDetails.user.getIdToken().then(async token => {
                     serverAuth(token)
-                    console.log("User from firebase: ", user.value.uid);
-                    const userDoc = await getData('users', user.value.uid)
-                    console.log("User doc: ", userDoc);
-                    user.value = {...user.value, ...userDoc}
-                    console.log("User during signup: ", user.value);
-                    // if(!userDoc.exists()){
-                    //     navigateTo('/')
-                    // }
+
+                    // console.log("User UID from firebase: ", user.value.uid);
+                    // const userDoc = await getData('users')
+                    // console.log("User doc from firebase: ", userDoc.value);
+                    // user.value = {...user.value, ...userDoc}
+                    // console.log("User during signup: ", user.value);
+                    // // if(!userDoc.exists()){
+                    // //     navigateTo('/')
+                    // // }
                 })
             })
         })

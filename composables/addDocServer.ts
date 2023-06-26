@@ -22,7 +22,7 @@ export default function addDocServer() {
             } else{
                 endpoint += '/document';
             }
-            console.log("This is the API endpoint: ", endpoint);
+            // console.log("This is the API endpoint: ", endpoint);
             
             const response = await $fetch(endpoint, {
                 method: 'POST',
