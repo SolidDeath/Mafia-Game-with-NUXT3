@@ -21,7 +21,8 @@ export default function useAuth(){
                 user.value = userDetails.user
                 userDetails.user.getIdToken().then(async token => {
                     serverAuth(token)
-
+                    //TODO: add a loading state
+                    //TODO: Add user doc timestamp update
                     // console.log("User UID from firebase: ", user.value.uid);
                     // const userDoc = await getData('users')
                     // console.log("User doc from firebase: ", userDoc.value);
@@ -55,7 +56,6 @@ export default function useAuth(){
     //TODO: 23:00 fix variables
     function signUp({email, password , name}){
         resetErrors()
-        const { addDocServe } = addDocServer()
         const validatedData = useAuthValidator({email, password, name}, 'signup')
         console.log("Validated data: ", validatedData);
         setPersistence(auth, browserLocalPersistence).then(() => {
@@ -65,12 +65,13 @@ export default function useAuth(){
                     // Create a user document in the database
                     console.log("User: ", user.value.uid);
                     try{
-                        await updateDocServer('animals',{
+                        //TODO: Add a timestamp
+                        await addDocServer('users',{
                                 uid: user.value.uid,
                                 name: name,
                                 email: email,
                                 accessLevel: 1,
-                        }, 'dog', 'friends', 'johnny')
+                        }, user.value.uid)
                     }
                     catch(err){
                         throw createError({
