@@ -5,7 +5,7 @@ export default function useAuth(){
     const { firestore: firestoreClient, auth } = useFirebaseClient()
     const { getData } = useFirestore()
 
-    const user = useState('userStore', () => ({}))
+    const user = useState('userStore', () => null)
     const errorBag = ref({
         email: null,
         password: null,
