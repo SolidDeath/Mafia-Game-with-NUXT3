@@ -65,13 +65,12 @@ export default function useAuth(){
                     // Create a user document in the database
                     console.log("User: ", user.value.uid);
                     try{
-                        await addDocServe('users',{
+                        await updateDocServer('animals',{
                                 uid: user.value.uid,
                                 name: name,
                                 email: email,
                                 accessLevel: 1,
-                        }, user.value.uid)
-
+                        }, 'dog', 'friends', 'johnny')
                     }
                     catch(err){
                         throw createError({
