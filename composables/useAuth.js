@@ -63,15 +63,14 @@ export default function useAuth(){
                 user.value = userDetails.user
                 userDetails.user.getIdToken().then(async token => {
                     // Create a user document in the database
-                    console.log("User: ", user.value.uid);
                     try{
                         //TODO: Add a timestamp
-                        await addDocServer('users',{
-                                uid: user.value.uid,
-                                name: name,
-                                email: email,
-                                accessLevel: 1,
-                        }, user.value.uid)
+                        addDocServer('users',{
+                            uid: user.value.uid,
+                            name: name,
+                            email: email,
+                            accessLevel: 1,
+                        }, user.value.uid )
                     }
                     catch(err){
                         throw createError({
