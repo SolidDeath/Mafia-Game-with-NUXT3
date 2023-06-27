@@ -43,6 +43,7 @@ export default function useAuth(){
                 method: "POST", 
                 body: JSON.stringify({ token })
             }).then(res => {
+                user.value = null //clears the user object in the store, resets the navbar
                 if(res.statusCode == 200){
                     navigateTo('/')
                 }
