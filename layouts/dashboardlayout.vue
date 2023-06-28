@@ -1,9 +1,8 @@
 <template>
     <div>
-        <Menu />
-        <main class="max-w-md mx-auto px-4 py-8">
-            <slot />
+        <Menu/>
+        <main class="px-4 py-16 text-accent bg-background">
+            <slot/>
         </main>
     </div>
 </template>
-

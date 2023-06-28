@@ -1,5 +1,5 @@
 <template>
-    <label class="text-base text-gray-700 font-medium">
+    <label class="text-accent text-base font-medium">
         <slot></slot>
     </label>
 </template>

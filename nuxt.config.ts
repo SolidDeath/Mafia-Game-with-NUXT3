@@ -10,6 +10,16 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
   ],
   i18n: { //i18n module options
+  },
+  app: {
+    head: {
+      title: 'Title goes here',
+      meta: [
+        {name: 'name goes here', content: 'content goes here'}
+      ],
+      link: [
+        {rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons'}
+      ]
+    }
   }
-  
 })
