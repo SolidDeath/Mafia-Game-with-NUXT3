@@ -1,13 +1,13 @@
 <template>
   <form v-bind="$attrs" class="w-full flex flex-col space-y-3" @submit.prevent="processForm">
-    <FormGroup v-if="formProps.type == 'signup'" label="Full Name" v-model="userForm.name" type="text" :errorMessage="errorBag.name" />
+    <FormGroup v-if="formProps.type == 'signup'" :label="$t('full_name')" v-model="userForm.name" type="text" :errorMessage="errorBag.name" />
 
-    <FormGroup label="Email" v-model="userForm.email" type="email" :errorMessage="errorBag.email" />
-    <FormGroup label="Password" v-model="userForm.password" type="password" :errorMessage="errorBag.password" />
+    <FormGroup :label="$t('email')" v-model="userForm.email" type="email" :errorMessage="errorBag.email" />
+    <FormGroup :label="$t('password')" v-model="userForm.password" type="password" :errorMessage="errorBag.password" />
 
     <div class="text-center">
       <Button class="bg-blue-500 text-white w-56" type="submit">
-        {{ formProps.type == "signin" ? "Login" : "Register" }}
+        {{ formProps.type == "signin" ? $t('sign_in') : $t('sign_up') }}
       </Button>
     </div>
   </form>
@@ -17,7 +17,9 @@
   const formProps = defineProps({
     type: {
       type: String,
-      validator: (value) => ["signin", "signup"].includes(value),
+      validator: (value) => ["signin", "signup"].includes(
+        
+      ),
     },
   })
   

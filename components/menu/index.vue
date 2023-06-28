@@ -5,12 +5,13 @@
       <p class="text-2xl font-semibold text-slate-50">Our App</p>
     </div>
 
+
     <div class="flex space-x-4 items-center">
-      <MenuLink href="/" v-if="!isLoggedIn">Sign In</MenuLink>
-      <MenuLink to="/signup" v-if="!isLoggedIn">Sign Up</MenuLink>
-      <MenuLink to="/dashboard" v-if="isLoggedIn">Dashboard</MenuLink>
-      <MenuLink to="/routeTest" v-if="isLoggedIn">Route Test</MenuLink>
-      <button @click="logOut" v-if="isLoggedIn" class="text-gray-50 font-semibold text-xl bg-purple-800 hover:bg-purple-900 p-2  rounded-md ">Sign out</button>
+      <MenuLink href="/" v-if="!isLoggedIn">{{ $t("sign_in")}}</MenuLink>
+      <MenuLink to="/signup" v-if="!isLoggedIn">{{ $t("sign_up")}}</MenuLink>
+      <MenuLink to="/dashboard" v-if="isLoggedIn">{{ $t('home_page')}}</MenuLink>
+      <MenuLink to="/routeTest" v-if="isLoggedIn">{{ $t('tool_page') }}</MenuLink>
+      <button @click="logOut" v-if="isLoggedIn" class="text-gray-50 font-semibold text-xl bg-purple-800 hover:bg-purple-900 p-2  rounded-md ">{{ $t("sign_out")}}</button>
       
     </div>
   </header>

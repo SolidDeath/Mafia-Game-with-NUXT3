@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Middleware test page</h1>
-        <p>Route Test</p>
+        <p>{{$t('tool_page')}}</p>
     </div>
 </template>
 
