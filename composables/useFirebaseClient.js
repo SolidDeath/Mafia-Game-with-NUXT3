@@ -4,12 +4,12 @@ import { getFirestore, serverTimestamp } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD_j0EN4okFX_fNCb3SPsPSYMXxLqgO42E",
-  authDomain: "nuxt-auth-8cf00.firebaseapp.com",
-  projectId: "nuxt-auth-8cf00",
-  storageBucket: "nuxt-auth-8cf00.appspot.com",
-  messagingSenderId: "992986381893",
-  appId: "1:992986381893:web:5f535956c92830c9456d2c"
+  apiKey: "AIzaSyAbploDv1TPKAq8zfuVz6kex5BvFPRrSPo",
+  authDomain: "mafia-tool.firebaseapp.com",
+  projectId: "mafia-tool",
+  storageBucket: "mafia-tool.appspot.com",
+  messagingSenderId: "323574644367",
+  appId: "1:323574644367:web:cffd1bd85c4bac363c3afa"
 };
 
 // Initialize Firebase
