@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, serverTimestamp } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD_j0EN4okFX_fNCb3SPsPSYMXxLqgO42E",
@@ -15,7 +16,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 const auth = getAuth(app)
-
+const storage = getStorage(app)
+const timestamp = serverTimestamp()
 
 const authReady = new Promise((resolve, reject) => {
   const unsubscribe = onAuthStateChanged(
@@ -33,6 +35,8 @@ export default function useFirebaseClient() {
         app,
         auth,
         firestore,
-        authReady
+        authReady,
+        storage,
+        timestamp
     }
 }
