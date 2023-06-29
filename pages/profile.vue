@@ -1,11 +1,9 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-
+  <NuxtLayout name="dashboardlayout">
+    Oh wow! You found the profile!
+  </NuxtLayout>
 </template>
 
-<style scoped>
+<script setup>
 
-</style>
+</script>

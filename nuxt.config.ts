@@ -18,7 +18,8 @@ export default defineNuxtConfig({
         {name: 'name goes here', content: 'content goes here'}
       ],
       link: [
-        {rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons'}
+        {rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons'},
+        { rel: 'icon', type: 'image/png', href: '/MWD_logo(t).png' }
       ]
     }
   }
