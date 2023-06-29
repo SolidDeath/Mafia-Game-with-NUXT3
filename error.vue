@@ -10,9 +10,12 @@
 
 <script setup>
     defineProps(['error'])
+    const localPath = useLocalePath()
 
-
-    const handleClearError = () => clearError({redirect: '/'})
+    const handleClearError = () => {
+        clearError()
+        navigateTo(localPath('/'))
+    }
 </script>
 
 <style scoped>

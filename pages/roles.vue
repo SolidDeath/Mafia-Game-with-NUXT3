@@ -10,7 +10,7 @@
 /*
   INITIAL VALUES FROM SERVER SIDE
 */
-  const roleref = ref(await useFetch('api/firestore/roles'))
+  const roleref = ref(await useFetch('../api/firestore/roles'))
   const roles = ref(roleref.value.data)
 
 /*

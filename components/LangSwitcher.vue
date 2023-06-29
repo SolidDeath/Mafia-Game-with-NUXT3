@@ -1,6 +1,6 @@
 <template>
     <div>
-        Switch Language:
+        {{$t('switch_language')}}
         <select v-model="language">
             <option 
                 v-for="item in locales" 

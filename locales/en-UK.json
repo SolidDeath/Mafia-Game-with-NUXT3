@@ -15,5 +15,8 @@
     "home_page": "Home",
     "dashboard": "Dashboard",
     "roles": "Roles",
-    "profile": "Profile"
+    "profile": "Profile",
+    "switch_language": "Switch Language",
+    "english": "English",
+    "latvian": "Latvian"
 }
