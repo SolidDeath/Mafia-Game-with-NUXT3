@@ -1,144 +1,211 @@
-import { updateDoc, serverTimestamp, collection, getDoc, getDocs, doc, addDoc, setDoc, query, where, onSnapshot, deleteDoc, Unsubscribe, DocumentData } from "firebase/firestore";
-import { ref, watchEffect } from "vue";
-const {app, auth, firestore } = useFirebaseClient()
+import { 
+    doc, 
+    getDoc, 
+    onSnapshot, 
+    collection, 
+    query, 
+    getDocs, 
+    addDoc, 
+    setDoc, 
+    updateDoc, 
+    deleteDoc 
+} from "firebase/firestore";
 
-//TODO: Add error handling
-export default function useFirestore(){
-    type WhereObject = {
-      field: string; 
-      operator: string, 
-      value: string
+import { ref } from "vue";
+
+export default function useFirestore() {
+    const { firestore } = useFirebaseClient();
+    
+    async function getDocument(collectionName: string, docId: string, subCollection?: string, subDocId?: string): Promise<{[key: string]: any}> {
+      let docRef;
+      
+      if(subCollection && subDocId) {
+        docRef = doc(firestore, collectionName, docId as string, subCollection, subDocId);
+      } else if(collectionName && docId) {
+        docRef = doc(firestore, collectionName, docId);
+      } else {
+        throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+      }
+      
+      const docSnap = await getDoc(docRef);
+      
+      return docSnap.data();
     }
   
-    type DocData = DocumentData & { id: string };
+    async function getCollection(collectionName: string, docId?: string, subCollection?: string): Promise<{[key: string]: any}[]> {
+      let q;
+      
+      if(docId && subCollection) {
+        q = query(collection(firestore, collectionName, docId, subCollection));
+      } else if(collectionName) {
+        q = query(collection(firestore, collectionName));
+      } else {
+        throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+      }
+      
+      const querySnapshot = await getDocs(q);
+      const docs = querySnapshot.docs.map(doc => doc.data());
+      
+      return docs;
+    }
   
-    async function subscribeToData(queryRef: any, returnedData: Ref<any[]>, error: Ref<string|null>) {
-        let unsub = onSnapshot(queryRef, (snap) => {
-            let updatedData: any[] = [];
-            if (!snap.docs) {
-                // This is a document, not a query
-                if (snap.exists()) {
-                    updatedData.push({ ...snap.data(), id: snap.id });
-                } else {
-                    error.value = `Document with id: ${snap.id} does not exist`;
-                }
-            } else {
-                // This is a query, we need to loop over docs
-                snap.forEach((doc: any) => {
-                    updatedData.push({ ...doc.data(), id: doc.id });
-                });
-            }
-            returnedData.value = updatedData;
-        }, (err) => {
-            // Handle any errors
-            error.value = `Failed to fetch data: ${err.message}`;
-        });
-    
-        watchEffect((onInvalidate) => {
-            onInvalidate(() => unsub());
-        });
+    function subscribeDocument(collectionName: string, docId?: string, subCollection?: string, subDocId?: string): Ref<null | {[key: string]: any}> {
+      const result = ref(null);
+      let docRef;
+      
+      if(subCollection && subDocId) {
+        docRef = doc(firestore, collectionName, docId as string, subCollection, subDocId);
+      } else if(collectionName && docId) {
+        docRef = doc(firestore, collectionName, docId);
+      } else {
+        throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+      }
+      
+      const unsubscribe = onSnapshot(docRef, (doc) => {
+        result.value = doc.data();
+      });
+      
+      onUnmounted(unsubscribe);
+      
+      return result;
+    }
+  
+    function subscribeCollection(collectionName: string, docId?: string, subCollection?: string): Ref<null | {[key: string]: any}[]> {
+      const results = ref([]);
+      let q;
+      
+      if(docId && subCollection) {
+        q = query(collection(firestore, collectionName, docId, subCollection));
+      } else if(collectionName) {
+        q = query(collection(firestore, collectionName));
+      } else {
+        throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+      }
+      
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        results.value = snapshot.docs.map(doc => doc.data());
+      });
+      
+      onUnmounted(unsubscribe);
+      
+      return results;
     }
     
-    
-  
-    const getData = (collectionName: string, docId?: string, subcollection?: string, subDocId?: string, queryObj?: WhereObject) => {
-        const returnedData = ref<DocData[]>([]);
-        const error = ref<string|null>(null);
-      
-        try {
-            let queryRef;
-      
-            if (!docId) {
-                let colRef = collection(firestore, collectionName);
-                queryRef = queryObj ? query(colRef, where(queryObj.field, queryObj.operator, queryObj.value)) : colRef;
-            } else {
-                let docRef = doc(firestore, collectionName, docId);
-                if (subcollection) {
-                    let subColRef = collection(docRef, subcollection);
-                    if (subDocId) {
-                        queryRef = doc(subColRef, subDocId);
-                    } else {
-                        queryRef = queryObj ? query(subColRef, where(queryObj.field, queryObj.operator, queryObj.value)) : subColRef;
-                    }
-                } else {
-                    queryRef = docRef;
-                }
-            }
-      
-            subscribeToData(queryRef, returnedData, error);
-        } catch (err) {
-            throw createError({statusCode: 500, message: "Failed to fetch data: " + err});
+    function getDataFromFirestore(subscribe: boolean, collectionName: string, docId?: string, subCollection?: string, subDocId?: string) {
+      if(subscribe) {
+        if(subCollection && subDocId) {
+          return subscribeDocument(collectionName, docId, subCollection, subDocId);
+        } else if(collectionName && docId) {
+          return subscribeDocument(collectionName, docId);
+        } else if(collectionName) {
+          return subscribeCollection(collectionName);
+        } else {
+          throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
         }
-        return returnedData
+      } else {
+        if(subCollection && subDocId) {
+          return getDocument(collectionName, docId, subCollection, subDocId);
+        } else if(collectionName && docId) {
+          return getDocument(collectionName, docId);
+        } else if(collectionName) {
+          return getCollection(collectionName);
+        } else {
+          throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+        }
+      }
     }
-      
 
-
-
-    async function addDocument(collectionName: string, data: object, docId?: string, subcollection?: string, subDocId?: string) {
-        try {
+    async function addDocument(
+        collectionName: string, 
+        docData: {[key: string]: any}, 
+        docId?: string, 
+        subCollection?: string
+    ): Promise<string> {
+        let docRef;
+        
+        if(subCollection) {
             if(docId) {
-                const docRef = doc(firestore, collectionName, docId);
-
-                // If a subcollection is specified, we'll add a document to it
-                if(subcollection) {
-                    const subColRef = collection(docRef, subcollection);
-
-                    // If a subdocument ID is specified, we'll set the document with that ID
-                    if (subDocId) {
-                        const subDocRef = doc(subColRef, subDocId);
-                        await setDoc(subDocRef, {
-                            ...data,
-                            createdAt: serverTimestamp()
-                        });
-                    } else {
-                        // If no subdocument ID is specified, we'll add a new document
-                        await addDoc(subColRef, {
-                            ...data,
-                            createdAt: serverTimestamp()
-                        });
-                    }
-                } else {
-                    // If no subcollection is specified, we'll update the main document
-                    await setDoc(docRef, {
-                        ...data,
-                        createdAt: serverTimestamp()
-                    });
-                }
+            docRef = collection(firestore, collectionName, docId, subCollection);
             } else {
-                // If no document ID is specified, we'll add a new document to the main collection
-                await addDoc(collection(firestore, collectionName), {
-                    ...data,
-                    createdAt: serverTimestamp()
-                });
+            throw createError({ statusCode: 400, statusMessage: "docId is required when adding to a subcollection." });
             }
-        } catch (error) {
-            throw createError({statusCode: 500, message: "Failed to " + error});
+        } else {
+            docRef = collection(firestore, collectionName);
         }
+        
+        const docRes = await addDoc(docRef, docData);
+        
+        return docRes.id;
     }
-
-
-
-    async function updateDocument(collectionName: string, docId: string, data: DocumentData, subcollection?: string, subDocId?: string){
-        try {
-            let docRef = doc(firestore, collectionName, docId);
-            docRef = (subcollection && subDocId) ? doc(docRef, subcollection, subDocId) : docRef;
-            await updateDoc(docRef, data);
-        } catch (error) {
-            throw createError({statusCode: 500, message: "Failed to update the document: " + error})
+    
+    async function setDocument(
+        collectionName: string, 
+        docId: string, 
+        docData: {[key: string]: any}, 
+        subCollection?: string, 
+        subDocId?: string
+        ): Promise<void> {
+        let docRef;
+        
+        if(subCollection && subDocId) {
+            docRef = doc(firestore, collectionName, docId, subCollection, subDocId);
+        } else if(collectionName && docId) {
+            docRef = doc(firestore, collectionName, docId);
+        } else {
+            throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
         }
+        
+        await setDoc(docRef, docData);
     }
-
-    async function deleteDocument(collectionName: string, docId: string, subcollection?: string, subDocId?: string){
-        try {
-            let docRef = doc(firestore, collectionName, docId);
-            docRef = (subcollection && subDocId) ? doc(docRef, subcollection, subDocId) : docRef;
-            await deleteDoc(docRef);
-        } catch (error) {
-            throw createError({statusCode: 500, message: "Failed to delete the document: " + error})
+    
+    async function updateDocument(
+        collectionName: string, 
+        docId: string, 
+        docData: {[key: string]: any}, 
+        subCollection?: string, 
+        subDocId?: string
+        ): Promise<void> {
+        let docRef;
+        
+        if(subCollection && subDocId) {
+            docRef = doc(firestore, collectionName, docId, subCollection, subDocId);
+        } else if(collectionName && docId) {
+            docRef = doc(firestore, collectionName, docId);
+        } else {
+            throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
         }
+        
+        await updateDoc(docRef, docData);
     }
-
-   
-    return {addDocument, updateDocument, deleteDocument, getData }
+    
+    async function deleteDocument(
+        collectionName: string, 
+        docId: string, 
+        subCollection?: string, 
+        subDocId?: string
+        ): Promise<void> {
+        let docRef;
+        
+        if(subCollection && subDocId) {
+            docRef = doc(firestore, collectionName, docId, subCollection, subDocId);
+        } else if(collectionName && docId) {
+            docRef = doc(firestore, collectionName, docId);
+        } else {
+            throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+        }
+        
+        await deleteDoc(docRef);
+    }
+    
+    return {
+        getDocument,
+        getCollection,
+        subscribeDocument,
+        subscribeCollection,
+        getDataFromFirestore,
+        addDocument,
+        setDocument,
+        updateDocument,
+        deleteDocument
+    }
 }

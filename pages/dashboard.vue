@@ -36,8 +36,6 @@
     })
 
 
-
-
     import highlightjs from "highlight.js"
     const form = reactive({
         title: "",
