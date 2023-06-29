@@ -11,7 +11,7 @@
       <MenuList :isLoggedIn="loginState"/>
     </div>
   </header>
-  <nav :class="[mobileMenu?'transform translate-x-0':'transform translate-x-[150%]','absolute transition transition-transform duration-200 w-screen h-screen bg-shallow md:hidden']">
+  <nav :class="[mobileMenu?'transform translate-x-0':'transform translate-x-[150%]','absolute transition-transform duration-200 w-screen h-screen bg-shallow md:hidden']">
     <div class="flex items-center justify-start flex-col h-full">
       <MenuList :isLoggedIn="loginState"/>
     </div>

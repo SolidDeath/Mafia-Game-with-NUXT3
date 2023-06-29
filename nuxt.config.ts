@@ -28,6 +28,11 @@ export default defineNuxtConfig({
       }
     ],
     defaultLocale: 'EN',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',  // recommended
+    }
   },
   app: {
     head: {

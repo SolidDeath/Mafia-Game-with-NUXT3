@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps } from 'firebase-admin/app'
 import {getFirestore} from 'firebase-admin/firestore'
+import {getAuth} from 'firebase-admin/auth'
 
 const firebaseServerConfig = {
   "type": "service_account",
@@ -24,9 +25,10 @@ const firebaseServerConfig = {
             credential: cert(firebaseServerConfig),
         })
       }
+    const auth = getAuth(app);
     const firestore = getFirestore(app);
     return {
-      app, firestore
+      app, firestore, auth
     }
 
   }
