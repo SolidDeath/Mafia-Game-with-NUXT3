@@ -51,24 +51,14 @@ export default function useIconStorage() {
     }
 
     const deleteImage = async (collection: string, docId: string) => {
-        console.log('Deleting image...', collection, docId);
-
         
-        try {
-            console.log('docId: ', docId);
-            console.log('Awaiting getData...');
-            
-            
+        try {           
             const docData = await getDocument(collection, docId);
-            console.log('docData: ', docData);
-            console.log('docData filePath: ', docData.filePath);
-            
-            
+
             if (!docData || !docData.imageUrl) {
                 throw new Error('Document not found or has no imageUrl field.');
             }
             const imageRef = ref(storage, docId);
-            console.log('imageRef: ', imageRef);
             
             await deleteObject(imageRef); //delete image from storage
 
