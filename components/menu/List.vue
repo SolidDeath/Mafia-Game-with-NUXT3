@@ -1,7 +1,6 @@
 <template>
   <MenuLink :href="localPath('/')" v-if="!isLoggedIn && onRegister">{{ $t('sign_in') }}</MenuLink>
   <MenuLink :to="localPath('/signup')" v-if="!isLoggedIn && !onRegister">{{ $t('sign_up') }}</MenuLink>
-  <MenuLink :to="localPath('/dashboard')" v-if="isLoggedIn">{{ $t('dashboard') }}</MenuLink>
   <MenuLink :to="localPath('/roles')" v-if="isLoggedIn">{{ $t('roles') }}</MenuLink>
   <MenuLink :to="localPath('/profile')" v-if="isLoggedIn">{{ $t('profile') }}</MenuLink>
   <MenuButton @click="logOut" v-if="isLoggedIn">{{ $t('sign_out') }}</MenuButton>

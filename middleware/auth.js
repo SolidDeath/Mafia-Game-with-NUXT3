@@ -16,10 +16,9 @@ export default defineNuxtRouteMiddleware( async (to, from) => {
 
         const data = await response.json()
 
-        console.log("Data: ", data);
         if(data.statusCode !== 200){
             console.log("User is not logged in");
-            return navigateTo(localPath('/'))
+            return navigateTo(localPath('/')) //this throws an a warning in the console, but it works, 
         }
     }
 })
