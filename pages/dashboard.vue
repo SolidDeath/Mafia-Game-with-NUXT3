@@ -20,6 +20,7 @@
                     </code>
                 </pre>
             </div>
+            <UploadIcon header="Upload an icon" />
 
 
         </div>
@@ -34,8 +35,6 @@
         }
     })
    
-
-
 
     import highlightjs from "highlight.js"
     const form = reactive({
