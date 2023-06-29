@@ -15,19 +15,19 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default', //strategy for choosing locale
     locales: [
       {
-        code: 'en-UK',
+        code: 'EN',
         iso: 'en-UK',
         name: 'English(UK)',
         file: 'en-UK.json'
       },
       {
-        code: 'lv-LV',
+        code: 'LV',
         iso: 'lv-LV',
         name: 'Latviešu',
         file: 'lv-LV.json'
       }
     ],
-    defaultLocale: 'en-UK',
+    defaultLocale: 'EN',
   }
   
 })

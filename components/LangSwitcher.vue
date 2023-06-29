@@ -21,7 +21,7 @@
         get: () => locale.value,
         set: (val) => {
             setLocale(val)
-            lang.value = val
+            lang.value = val //store the value in the local storage
         }
     })
 </script>

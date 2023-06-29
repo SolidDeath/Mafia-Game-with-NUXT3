@@ -4,6 +4,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 export default function useAuth(){
     const { firestore: firestoreClient, auth } = useFirebaseClient()
     const { getData } = useFirestore()
+    const localPath = useLocalePath()
 
     const user = useState('userStore', () => null)
     const errorBag = ref({
@@ -45,7 +46,7 @@ export default function useAuth(){
             }).then(res => {
                 user.value = null //clears the user object in the store, resets the navbar
                 if(res.statusCode == 200){
-                    navigateTo('/')
+                    navigateTo(localPath('/'))
                 }
             }).catch(err => {
                 alert("LogoutError: ", err.message)
@@ -112,7 +113,7 @@ export default function useAuth(){
             body: JSON.stringify({ token })
         }).then(res => {
             if(res.statusCode == 200){
-                navigateTo('/dashboard')
+                navigateTo(localPath('/dashboard'))
             }
         }).catch(err => {
             alert("Invalid creds", err.message)
