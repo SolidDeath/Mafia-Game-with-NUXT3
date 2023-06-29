@@ -14,11 +14,14 @@
                 <button class="btn" v-else>Saving...</button>
             </div>
         </form>
-        <button @click="handleDelete">Delete an icon</button>
+
+
+        <!-- FOR TESTING PURPOSES -->
+        <!-- <button @click="handleDelete">Delete an icon</button>
         <div v-for="item in icons" :key="item.fileName" @click="handleDelete(item.fileName)">
             <p>{{ item.originalName }}</p>
             <img :src="item.imageUrl" >
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -99,8 +102,10 @@
             }
         }
 
-        const handleDelete = (uid) => {
-            deleteImage('playerIcon', uid)
-        }
+        
+        // FOR TESTING PURPOSES
+        // const handleDelete = (uid) => {
+        //     deleteImage('playerIcon', uid)
+        // }
 
 </script>

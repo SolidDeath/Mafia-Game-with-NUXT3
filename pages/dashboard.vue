@@ -20,7 +20,6 @@
                     </code>
                 </pre>
             </div>
-            <UploadIcon header="Upload an icon" />
 
 
         </div>
