@@ -4,6 +4,8 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 export default function useAuth(){
     const { firestore: firestoreClient, auth } = useFirebaseClient()
     const { getData } = useFirestore()
+    const localPath = useLocalePath()
+
 
     const user = useState('userStore', () => null)
     const errorBag = ref({
@@ -39,22 +41,21 @@ export default function useAuth(){
     function logOut(){ //have to send a request to server to log the user out (invalidate) and then delete the session cookie
         const token = user.uid
         signOut(auth).then(() => {
-            $fetch("api/logout",  { //passes the token to the server though an api route for more information see server/api/login.post.js
+            $fetch("../api/logout",  { // ""../"" added because of localization prefix
                 method: "POST", 
                 body: JSON.stringify({ token })
             }).then(res => {
                 user.value = null //clears the user object in the store, resets the navbar
                 if(res.statusCode == 200){
-                    navigateTo('/')
+                    navigateTo(localPath('/'))
                 }
             }).catch(err => {
                 alert("LogoutError: ", err.message)
             })
         })
-
-
     }
-    //TODO: 23:00 fix variables
+
+
     function signUp({email, password , name}){
         resetErrors()
         const validatedData = useAuthValidator({email, password, name}, 'signup')
@@ -112,7 +113,7 @@ export default function useAuth(){
             body: JSON.stringify({ token })
         }).then(res => {
             if(res.statusCode == 200){
-                navigateTo('/dashboard')
+                navigateTo(localPath('/dashboard'))
             }
         }).catch(err => {
             alert("Invalid creds", err.message)

@@ -1,6 +1,6 @@
 <template>
     <NuxtLayout name="guestlayout">
-        <MetaTags title="Sign Up" description="This is the sign up page" />
+        <MetaTags :title="$t('sign_up')" :description="$t('sign_up_descrip')" />
         <UserForm type="signup" />
     </NuxtLayout>
 </template>

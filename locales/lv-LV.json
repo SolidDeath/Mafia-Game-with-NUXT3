@@ -1,0 +1,19 @@
+{
+    "home_title": "Mafijas Spēle",
+    "sign_in": "Pierakstīties",
+    "sign_up": "Reģistrēties",
+    "sign_out": "Izrakstīties",
+    "username": "Lietotājvārds",
+    "full_name": "Pilns vārds",
+    "password": "Parole",
+    "email": "E-pasts",
+    "confirm_password": "Apstipriniet paroli",
+    "submit": "Iesniegt",
+    "cancel": "Atcelt",
+    "error": "Kļūda",
+    "ok": "OK",
+    "home_page": "Sākums",
+    "dashboard": "Mērinstrumentu panelis",
+    "roles": "Lomas",
+    "profile": "Profils"
+    }

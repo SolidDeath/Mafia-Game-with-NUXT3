@@ -1,20 +1,39 @@
 <template>
-  <MenuLink href="/" v-if="!isLoggedIn&&currentPage.name!='index'">Sign In</MenuLink>
-  <MenuLink to="/signup" v-if="!isLoggedIn&&currentPage.name!='signup'">Sign Up</MenuLink>
-  <MenuLink to="/dashboard" v-if="isLoggedIn">Dashboard</MenuLink>
-  <MenuLink to="/roles" v-if="isLoggedIn">Roles</MenuLink>
-  <MenuLink to="/profile" v-if="isLoggedIn">Profile</MenuLink>
-  <MenuButton @click="logOut" v-if="isLoggedIn">Sign out</MenuButton>
+  <MenuLink :href="localPath('/')" v-if="!isLoggedIn && onRegister">{{ $t('sign_in') }}</MenuLink>
+  <MenuLink :to="localPath('/signup')" v-if="!isLoggedIn && !onRegister">{{ $t('sign_up') }}</MenuLink>
+  <MenuLink :to="localPath('/dashboard')" v-if="isLoggedIn">{{ $t('dashboard') }}</MenuLink>
+  <MenuLink :to="localPath('/roles')" v-if="isLoggedIn">{{ $t('roles') }}</MenuLink>
+  <MenuLink :to="localPath('/profile')" v-if="isLoggedIn">{{ $t('profile') }}</MenuLink>
+  <MenuButton @click="logOut" v-if="isLoggedIn">{{ $t('sign_out') }}</MenuButton>
 </template>
 
 <script setup lang="ts">
+
+/*
+  PROPS
+*/
+  defineProps({
+    isLoggedIn: Boolean
+  })
+
+/*
+  IMPORTS
+*/
+
 const { logOut } = useAuth()
+
+/*
+  ROUTING
+*/
 const currentPage = computed(() => {
   return useRoute();
 })
-defineProps({
-  isLoggedIn: Boolean
-})
+
+
+const localPath = useLocalePath()
+const route = useRoute()  
+let onRegister = route.path.includes("signup")
+
 </script>
 
 <style scoped>
