@@ -1,7 +1,7 @@
 
 <template>
   <header class="w-full h-16 bg-deep px-6 flex items-center justify-between">
-    <div class="h-full flex justify-between items-center" @click="navigateTo(localPath('/dashboard'))">
+    <div class="h-full flex justify-between items-center cursor-pointer" @click="navigateTo(localPath('/dashboard'))">
       <img src="/MWD_logo(t).png" alt="Mafia Game logo" class="h-full" />
     </div>
     <div @click="toggleMobileMenu()" class="h-full flex justify-between items-center cursor-pointer md:hidden">

@@ -1,11 +1,15 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  $END$
+  <NuxtLayout name="dashboardlayout">
+    Here will go the admin thingies!
+    <LangSwitcher/>
+  </NuxtLayout>
 </template>
 
-<style scoped>
-
-</style>
+<script setup>
+definePageMeta({
+  middleware: ['auth','access-level-check'], // Include your middleware here
+  meta: {
+    requiredAccess: 2 // Specify the required access level here
+  }
+})
+</script>
