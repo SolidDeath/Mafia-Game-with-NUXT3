@@ -15,7 +15,7 @@ const buttons = ['Add role', 'Add admin', 'Add preset', 'Edit settings']
 definePageMeta({
   middleware: ['auth','access-level-check'], // Include your middleware here
   meta: {
-    requiredAccess: 1 // Specify the required access level here
+    requiredAccess: 2 // Specify the required access level here
   }
 })
 </script>
