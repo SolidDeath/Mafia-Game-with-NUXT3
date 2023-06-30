@@ -4,7 +4,7 @@
       <div class="w-full h-max flex items-center justify-center gap-4">
         <button v-for="loc in locales" :class="[loc.code==locale?'bg-crimson':'bg-background','w-[50px] h-full shrink-0 hover:transform hover:translate-y-[-4px] transition-trasnform transition-200 p-4']" @click="setLocale(loc.code); $emit('closeModal')">{{ loc.code }}</button>
       </div>
-      <button @click="$emit('closeModal')" class="bg-background text-acccent font-bold text-lg text-center rounded-lg px-8 py-2 hover:bg-crimson/90 mt-8">Cancel</button>
+      <button @click="$emit('closeModal')" class="bg-background text-acccent font-bold text-lg text-center rounded-lg px-8 py-2 hover:bg-crimson/90 mt-8">{{ $t('cancel') }}</button>
     </div>
   </div>
 </template>

@@ -8,10 +8,10 @@
                 <!-- <label>Upload role icon</label> -->
                 <input type="file" @change="handleChange" required>
             </div>
-            <p class="success" v-if="!hasValue && wasUploaded">Icon was successfully uploaded!</p>
+            <p class="success" v-if="!hasValue && wasUploaded">{{ $t('icon_success') }}</p>
             <div class="buttons" @click="handleSubmit">
-                <button class="btn" v-if="!isPending">Upload</button>
-                <button class="btn" v-else>Saving...</button>
+                <button class="btn" v-if="!isPending">{{ $t('upload') }}</button>
+                <button class="btn" v-else>{{ $t('saving') }}...</button>
             </div>
         </form>
 
