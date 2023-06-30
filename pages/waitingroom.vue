@@ -1,6 +1,9 @@
 <template>
-  <NuxtLayout name="dashboardlayout">
-    Welcome to the waiting room!
+  <NuxtLayout name="gamelayout">
+    <img src="/MWD_wait(t).svg" alt="WAITING..." class="w-32 animate-spin z-[99]"/>
+    <h1 class="text-center font-Ax font-bold text-accent text-md md:text-lg lg:text-xl text-Ax0 mb-2">Waiting for more players</h1>
+    <p class="text-center font-Ax font-light text-accent text-xs md:text-sm text-Ax0 max-w-[500px] mx-auto">When the lobby is joined by enough players the game will begin.</p>
+    <NuxtLink :to="localPath('/dashboard')" class="m-8 px-4 py-2 rounded-md bg-crimson text-accent text-md font-bold cursor-pointer hover:transform hover:translate-y-[-4px] transition-transform transition-200">Leave</NuxtLink>
   </NuxtLayout>
 </template>
 
@@ -11,4 +14,5 @@ definePageMeta({
     requiredAccess: 1 // Specify the required access level here
   }
 })
+const localPath = useLocalePath()
 </script>
