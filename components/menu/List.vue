@@ -40,14 +40,14 @@ let isAdmin = ref(false)
 */
   const { logOut } = useAuth()
 
-  
   onMounted(async () => {
     const { auth, authReady } = useFirebaseClient()
     await authReady
-    let userId = auth.currentUser.uid
-    
-    const userData = await getDocument('users', userId)	
-    isAdmin.value = userData.accessLevel > 1
+    if(auth.currentUser){
+      let userId = auth.currentUser.uid
+      const userData = await getDocument('users', userId)	
+      isAdmin.value = userData.accessLevel > 1
+    }
     
   })
 

@@ -36,9 +36,9 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'Title goes here',
+      title: 'Mafia Game',
       meta: [
-        {name: 'name goes here', content: 'content goes here'}
+        {name: 'Mafia game', content: 'Mafia game'}
       ],
       link: [
         {rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons'},
