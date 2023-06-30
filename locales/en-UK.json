@@ -18,5 +18,24 @@
     "profile": "Profile",
     "switch_language": "Switch Language",
     "english": "English",
-    "latvian": "Latvian"
+    "latvian": "Latvian",
+    "admin": "Control",
+    "intro": "Welcome to the Mafia game",
+    "desc": "Mafia is a game of lying, bluffing and deceit where players try to eliminate other teams from the game. There are several teams that include Mafia and Civilians. The game is divided into two phases: night and day.",
+    "join": "Join",
+    "close": "Close",
+    "icon_success": "The icon was successfully uploaded",
+    "upload": "Upload",
+    "saving": "Saving",
+    "saved": "Saved",
+    "save": "Save",
+    "admin_panel": "Admin Panel",
+    "add_role": "Add Role",
+    "add_admin": "Add Admin",
+    "add_preset": "Add Preset",
+    "edit_settings": "Settings",
+    "waiting_players": "Waiting for more players",
+    "lobby_prompt": "When the lobby is joined by enough players, the game will commence!",
+    "leave": "Leave"
+
 }
