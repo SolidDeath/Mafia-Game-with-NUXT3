@@ -108,7 +108,7 @@ export default function useAuth(){
     }
 
     function serverAuth(token){ //takes in a token from the client and sends it to the server to be validated
-        $fetch("api/login",  { //passes the token to the server though an api route for more information see server/api/login.post.js
+        $fetch("../api/login",  { //passes the token to the server though an api route for more information see server/api/login.post.js
             method: "POST", 
             body: JSON.stringify({ token })
         }).then(res => {
@@ -117,6 +117,7 @@ export default function useAuth(){
             }
         }).catch(err => {
             alert("Invalid creds", err.message)
+            // navigateTo(localPath('/dashboard'))
         })
     }
 
