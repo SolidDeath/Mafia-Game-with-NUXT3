@@ -2,6 +2,7 @@
   <MetaTags :title="$t('sign_in')" description="This is the sign in page" />
   <NuxtLayout name="guestlayout">
     <UserForm type="signin" />
+    <LangSwitcher/>
   </NuxtLayout>
 </template>
 

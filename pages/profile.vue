@@ -1,6 +1,9 @@
 <template>
   <NuxtLayout name="dashboardlayout">
-    Oh wow! You found the profile!
+    <div class="max-w-xl mx-auto px-4 py-16">
+      <EditForm/>
+    </div>
+    <LangSwitcher/>
   </NuxtLayout>
 </template>
 
