@@ -1,11 +1,11 @@
 <template>
   <form v-bind="$attrs" class="w-full flex flex-col space-y-3" @submit.prevent="processForm">
-    <FormGroup :label="$t('full_name')" v-model="userForm.name" type="text"/>
+    <FormGroup :label="$t('username')" v-model="userForm.name" type="text"/>
     <div class="w-full p-4 grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 auto-rows-auto gap-y-4 items-center justify-items-center">
       <Role v-for="icon in icons.value" v-bind="icon" @click="userForm.iconUrl = icon.iconUrl" :class="userForm.iconUrl == icon.iconUrl ? 'ring-crimson ring-2' : ''" :id="icon.iconUrl"/>
     </div>
     <div class="text-center">
-      <Button class="bg-blue-500 text-white w-56" type="submit" @click.prevent="handleSave">{{button}}</Button>
+      <Button class="bg-blue-500 text-white w-56" type="submit" @click.prevent="handleSave">{{$t("save")}}</Button>
     </div>
   </form>
 </template>
