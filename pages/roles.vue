@@ -4,7 +4,6 @@
         <RoleCard v-if="roles" @click="handleRoleShow(role)" v-for="role in roles.value" :iconLink="role.iconUrl" :name="role.title" :id="role.title"/>
     </div>
     <RoleModal @closeModal="handleRoleHide" v-show="showRoleInfo" v-bind="roleContent"/>
-    <LangSwitcher/>
   </NuxtLayout>
 </template>
 

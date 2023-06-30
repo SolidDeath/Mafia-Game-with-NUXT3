@@ -1,7 +1,6 @@
 <template>
     <NuxtLayout name="dashboardlayout">
         Here will go the content of the dashboard! (And it will be cool)
-        <LangSwitcher/>
     </NuxtLayout>
 </template>
 

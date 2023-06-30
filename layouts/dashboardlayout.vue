@@ -4,5 +4,6 @@
         <main class="px-4 py-16 text-accent">
             <slot/>
         </main>
+        <LangSwitcher/>
     </div>
 </template>
