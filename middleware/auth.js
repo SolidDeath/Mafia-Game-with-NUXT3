@@ -1,7 +1,6 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if (process.server) {
       const cookie = useCookie('authCookie')
-      console.log("Cookie: ", cookie.value);
   
       if (!cookie.value) {
         console.error('No auth cookie found')
@@ -15,7 +14,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         },
         body: JSON.stringify({ sessionCookie: cookie.value })
       })
-      console.log("Response auth.js : ", response);
       if (!response.ok) {
         console.log("User is not logged in");
         return navigateTo('/')
