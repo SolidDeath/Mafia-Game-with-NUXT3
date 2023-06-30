@@ -1,5 +1,5 @@
 <template>
-  <img class="w-[50px] h-[50px] hover:transform hover:translate-y-[-2px] cursor-pointer transition-transform transition-200 hover:ring-crimson hover:ring-2" :src="iconUrl" :alt="title"/>
+  <img class="w-[70px] h-[70px] hover:transform hover:translate-y-[-2px] cursor-pointer transition-transform transition-200 p-2 hover:ring-crimson hover:ring-2 rounded-md" :src="iconUrl" :alt="title"/>
 </template>
 
 <script setup lang="ts">
