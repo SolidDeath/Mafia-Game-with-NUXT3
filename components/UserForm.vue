@@ -1,6 +1,6 @@
 <template>
   <form v-bind="$attrs" class="w-full flex flex-col space-y-3" @submit.prevent="processForm">
-    <FormGroup v-if="formProps.type == 'signup'" :label="$t('full_name')" v-model="userForm.name" type="text" :errorMessage="errorBag.name" />
+    <FormGroup v-if="formProps.type == 'signup'" :label="$t('username')" v-model="userForm.displayName" type="text" :errorMessage="errorBag.displayName" />
 
     <FormGroup :label="$t('email')" v-model="userForm.email" type="email" :errorMessage="errorBag.email" />
     <FormGroup :label="$t('password')" v-model="userForm.password" type="password" :errorMessage="errorBag.password" />
@@ -22,7 +22,7 @@
   })
   
   const userForm = reactive({
-    name: "",
+    displayName: "",
     email: "",
     password: "",
   })

@@ -1,6 +1,6 @@
 <template>
   <form v-bind="$attrs" class="w-full flex flex-col space-y-3" @submit.prevent="processForm">
-    <FormGroup :label="$t('username')" v-model="userForm.name" type="text"/>
+    <FormGroup :label="$t('username')" v-model="userForm.displayName" type="text"/>
     <div class="w-full p-4 grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 auto-rows-auto gap-y-4 items-center justify-items-center">
       <Role v-for="icon in icons.value" v-bind="icon" @click="userForm.iconUrl = icon.iconUrl" :class="userForm.iconUrl == icon.iconUrl ? 'ring-crimson ring-2' : ''" :id="icon.iconUrl"/>
     </div>
@@ -18,7 +18,7 @@ const { subscribeCollection, getDocument, updateDocument } = useFirestore()
 */
 
   const userForm = reactive({
-    name: "",
+    displayName: "",
     iconUrl: "",
     id: ""
   })
@@ -42,7 +42,7 @@ const { subscribeCollection, getDocument, updateDocument } = useFirestore()
     await authReady
     console.log(auth.currentUser.uid);
     user.value = await getDocument('users', auth.currentUser.uid)
-    userForm.name = user.value.name
+    userForm.displayName = user.value.displayName
     userForm.iconUrl = user.value.iconUrl
     userForm.id = user.value.uid
 
@@ -57,7 +57,7 @@ const { subscribeCollection, getDocument, updateDocument } = useFirestore()
   const saveUpdates = async () => {
     console.log(userForm);
     await updateDocument("users", userForm.id, {
-      name: userForm.name,
+      displayName: userForm.displayName,
       iconUrl: userForm.iconUrl
     })
   }
@@ -65,7 +65,7 @@ const { subscribeCollection, getDocument, updateDocument } = useFirestore()
   const handleSave = () => {
     console.log('saving');
     isPending.value = true
-    if(checkSpecialChars(userForm.name)){
+    if(checkSpecialChars(userForm.displayName)){
       console.log('saving');
       saveUpdates()
       // navigateTo(localPath('/dashboard'))

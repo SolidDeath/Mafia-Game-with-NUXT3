@@ -11,7 +11,7 @@ export default function useAuth(){
     const errorBag = ref({
         email: null,
         password: null,
-        name: null
+        displayName: null
     })
     useFirebaseClient()
 
@@ -56,9 +56,9 @@ export default function useAuth(){
     }
 
 
-    function signUp({email, password , name}){
+    function signUp({email, password , displayName}){
         resetErrors()
-        const validatedData = useAuthValidator({email, password, name}, 'signup')
+        const validatedData = useAuthValidator({email, password, displayName}, 'signup')
         console.log("Validated data: ", validatedData);
         setPersistence(auth, browserLocalPersistence).then(() => {
             createUserWithEmailAndPassword(auth, email, password).then(userDetails => {
@@ -69,7 +69,7 @@ export default function useAuth(){
                         //TODO: Add a timestamp
                         addDocServer('users',{
                             uid: user.value.uid,
-                            name: name,
+                            displayName: displayName,
                             email: email,
                             accessLevel: 1,
                         }, user.value.uid )
@@ -103,7 +103,7 @@ export default function useAuth(){
         errorBag.value = {
             email: null,
             password: null,
-            name: null,
+            displayName: null,
         }
     }
 
