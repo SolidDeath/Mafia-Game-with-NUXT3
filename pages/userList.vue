@@ -1,6 +1,7 @@
 <template>
     <div>
-        <p>{{ users }}</p>
+        <User v-for="user in users" :username="user.displayName" :accessLevel="user.accessLevel" :email="user.email" :userIcon="user.userIcon" :userId="user.uid"/>
+        {{ users }}
     </div>
 </template>
 
@@ -10,9 +11,10 @@
     const users = ref([])
     const isPending = ref(false)
 
-    users.value = useFetch("firestore", users)
+    users.value = useFetch("../api/firestore/users")
 
     onMounted(() => {
         users.value = subscribeCollection("users")
+        console.log(users.value);
     })
 </script>
