@@ -13,6 +13,6 @@ export default defineEventHandler(async (event) => {
 
     // Transforms the documents data into a more usable format
     const data = docsSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-
+    console.log("Data from the collection composable",data);
     return data;
 });
