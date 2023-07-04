@@ -1,5 +1,7 @@
 <template>
   <form v-bind="$attrs" class="w-full flex flex-col space-y-3" @submit.prevent="processForm">
+    <!-- TODO: style errors -->
+    <h2 v-if="showError">{{ showError }}</h2>
     <FormGroup :label="$t('username')" v-model="userForm.displayName" type="text"/>
     <div class="w-full p-4 grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 auto-rows-auto gap-y-4 items-center justify-items-center">
       <Role v-for="icon in icons.value" v-bind="icon" @click="userForm.iconUrl = icon.iconUrl" :class="userForm.iconUrl == icon.iconUrl ? 'ring-crimson ring-2' : ''" :id="icon.iconUrl"/>
@@ -25,7 +27,7 @@ const { subscribeCollection, getDocument, updateDocument } = useFirestore()
   const icons = ref([])
   const user = ref({})
   const isPending = ref(false)
-
+  const showError = ref("")
   const button = ref('Save')	
   onMounted(async() => {
     /*
