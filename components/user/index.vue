@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-
+    const { USER_TYPES: userTypes } = useDropdowns()
     const { updateDocument } = useFirestore()
     const showError = ref("")
     const isPending = ref(false)
@@ -51,13 +51,7 @@
     const userAccessLevel = ref(0)
     const userDisplayName = ref('')
 
-    const userTypes = ref([
-        { text: '0 - Banned user', value: 0 },
-        { text: '1 - User with an account', value: 1 },
-        { text: '2 - Premium user', value: 2 },
-        { text: '3 - Admin', value: 3 },
-        { text: '4 - Super admin', value: 4 },
-    ]);
+
 
     function checkAccessLevelRange(input) {
         return /^[0-4]$/.test(input);
