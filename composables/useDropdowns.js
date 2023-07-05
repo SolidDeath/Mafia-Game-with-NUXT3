@@ -49,16 +49,21 @@ const ACTION = [
     {value: 'BLOCK_ACTION', name: 'Block action'}
 ]
 
+const USER_TYPES = ref([
+    { text: '0 - Banned user', value: 0 },
+    { text: '1 - User with an account', value: 1 },
+    { text: '2 - Premium user', value: 2 },
+    { text: '3 - Admin', value: 3 },
+    { text: '4 - Super admin', value: 4 },
+]);
 
-
-
-
-export default dropdowns = () => {
+export default function useDropdowns() {
     return {
         ALIGNMENT,
         AURA,
         WIN_CONDITION,
         CATEGORY,
         ACTION,
+        USER_TYPES
     }
 }
