@@ -8,26 +8,24 @@
                     <img :src="userIcon" class="w-24 h-24 rounded-full" />
                     <h1 class="text-2xl font-bold mt-2">{{ displayName }}</h1>
                     <div>
-                        <label for="emailInput">{{ $t("email") }}</label>
+                        <Label>{{ $t("email") }}</Label>
                         <InputWithCopy :value="email" name="emailInput"/>
                     </div>
                     <div>
-                        <label for="userIdInput">{{ $t("user_id") }}</label>
+                        <Label>{{ $t("user_id") }}</Label>
                         <InputWithCopy :value="userId" name="userIdInput"/>
                     </div>
+                    <FormGroup :label="$t('username')" v-model="userDisplayName" type="text"/>
                     <div>
-                        <label for="accessLevelDrop">{{ $t("access_level") }}: </label>
-                        <!-- TODO: fix props or emits, does not update properly -->
+                        <Label>{{ $t("access_level") }}: </Label>
                         <Dropdown 
                             :options="userTypes" 
-                            v-model="userForm.userAccessLevel"
-                            name="accessLevelDrop"
-                            @update:modelValue="(val) => userForm.userAccessLevel = val"
+                            v-model:currentValue="userAccessLevel"
                         />
                     </div>
                     <div class="text-center">
                         <!-- TODO: Add dynamic buttons -->
-                        <Button class="bg-blue-500 text-white w-56" type="submit" @click.prevent="handleSave">{{$t("save")}}</Button>
+                        <Button class="bg-blue-500 text-white w-56" type="submit" @click.prevent="handleSave">{{$t(buttonValue)}}</Button>
                     </div>
                 </form>
       
@@ -41,18 +39,17 @@
     const { updateDocument } = useFirestore()
     const showError = ref("")
     const isPending = ref(false)
+    const buttonValue = ref('save')
     const props = defineProps({
         displayName: String,
         email: String,
         accessLevel: Number,
         userIcon: String,
         userId: String,
-        modelValue: Number
     })
 
-    const userForm = reactive({
-        userAccessLevel: 0
-    })
+    const userAccessLevel = ref(0)
+    const userDisplayName = ref('')
 
     const userTypes = ref([
         { text: '0 - Banned user', value: 0 },
@@ -67,21 +64,29 @@
     }
 
     onMounted(() => {
-        userForm.userAccessLevel = props.accessLevel
+        userAccessLevel.value = props.accessLevel
+        userDisplayName.value = props.displayName
+    })
+
+    watchEffect(() => {
+        if(isPending == true){
+            buttonValue.value = 'saving'
+        }
+        else{
+            buttonValue.value = 'save'
+        }
     })
 
     const saveUpdates = async () => {
-        console.log(userForm);
         await updateDocument("users", props.userId, {
-            accessLevel: userForm.userAccessLevel
+            displayName: userDisplayName.value,
+            accessLevel: Number(userAccessLevel.value)
         })
     }
 
     const handleSave = () => {
-        console.log('saving');
         isPending.value = true
-        if(checkAccessLevelRange(userForm.userAccessLevel)){
-            console.log('saving');
+        if(checkAccessLevelRange(userAccessLevel.value)){
             saveUpdates()
             // navigateTo(localPath('/dashboard'))
         }

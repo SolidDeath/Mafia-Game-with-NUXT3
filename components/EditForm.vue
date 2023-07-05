@@ -1,6 +1,6 @@
 <template>
   <form v-bind="$attrs" class="w-full flex flex-col space-y-3" @submit.prevent="processForm">
-    <!-- TODO: style errors -->
+    <!-- TODO: style -->
     <h2 v-if="showError">{{ showError }}</h2>
     <FormGroup :label="$t('username')" v-model="userForm.displayName" type="text"/>
     <div class="w-full p-4 grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 auto-rows-auto gap-y-4 items-center justify-items-center">
