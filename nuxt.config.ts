@@ -45,5 +45,10 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', href: '/MWD_logo(t).png' }
       ]
     }
+  },
+  vue: {  
+    compilerOptions: {
+      isCustomElement: (tag) => ['LangSwitcher'].includes(tag),
+    },
   }
 })
