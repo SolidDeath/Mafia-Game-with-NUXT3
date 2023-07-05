@@ -38,7 +38,8 @@
     "lobby_prompt": "When the lobby is joined by enough players, the game will commence!",
     "leave": "Leave",
     "user_id": "User ID",
-    "access_level": "Access levels"
+    "access_level": "Access levels",
+    "user_list": "User list"
 
 
 }
