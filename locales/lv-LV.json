@@ -36,5 +36,7 @@
     "edit_settings": "Iestatījumi",
     "waiting_players": "Nepieciešami vēl spēlētāji!",
     "lobby_prompt": "Kad pievinosies pietiekami daudz spēlētāju, spēle sāksies!",
-    "leave": "Pamest"
+    "leave": "Pamest",
+    "user_id": "Lietotāja ID",
+    "access_level": "Pieejas līmenis"
 }

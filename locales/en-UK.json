@@ -36,6 +36,9 @@
     "edit_settings": "Settings",
     "waiting_players": "Waiting for more players",
     "lobby_prompt": "When the lobby is joined by enough players, the game will commence!",
-    "leave": "Leave"
+    "leave": "Leave",
+    "user_id": "User ID",
+    "access_level": "Access levels"
+
 
 }
