@@ -5,7 +5,7 @@ const ALIGNMENT = [
 ]
 
 const AURA = [
-    {value: 'EVIT', name: 'Evil'},
+    {value: 'EVIL', name: 'Evil'},
     {value: 'GOOD', name: 'Good'}, 
     {value: 'UNKNOWN', name: 'Unknown'}
 ]
@@ -50,11 +50,11 @@ const ACTION = [
 ]
 
 const USER_TYPES = ref([
-    { text: '0 - Banned user', value: 0 },
-    { text: '1 - User with an account', value: 1 },
-    { text: '2 - Premium user', value: 2 },
-    { text: '3 - Admin', value: 3 },
-    { text: '4 - Super admin', value: 4 },
+    { value: 0, name: '0 - Banned user'},
+    { value: 1, name: '1 - User with an account'},
+    { value: 2, name: '2 - Premium user'},
+    { value: 3, name: '3 - Admin'},
+    { value: 4, name: '4 - Super admin'},
 ]);
 
 export default function useDropdowns() {
