@@ -46,11 +46,9 @@ export default function useAuth(){
                 body: JSON.stringify({ token })
             }).then(res => {
                 user.value = null //clears the user object in the store, resets the navbar
-                if(res.statusCode == 200){
-                    navigateTo(localPath('/'))
-                }
+                navigateTo(localPath('/'))
             }).catch(err => {
-                alert("LogoutError: ", err.message)
+                // alert("LogoutError: ", err.message)
             })
         })
     }
@@ -84,6 +82,8 @@ export default function useAuth(){
 
                     try{
                         serverAuth(token) //Creates a session cookie on the server and sends it back to the client
+                        navigateTo(localPath("/profile"))
+
                     }
                     catch(err){
                         throw createError({
@@ -93,7 +93,10 @@ export default function useAuth(){
                     }
 
                 })
-            })
+
+            }
+            
+            )
         })
     }
 

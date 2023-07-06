@@ -17,7 +17,7 @@
   if(process.server){
       const authCookie = useCookie("authCookie")
       loginState.value = authCookie.value ? true : false //if authCookie.value is not null, then
-      if(loginState.value){
+      if(loginState.value == true){
         navigateTo(localPath('/dashboard'))
       }
   }
@@ -25,7 +25,7 @@
     const {user} = useAuth()
     watch(user, (newValue) => {//watching the user object
       loginState.value = newValue ? true : false //if there is a user object, then isLoggedIn is true
-      if(loginState.value){
+      if(loginState.value == true){
         navigateTo(localPath('/dashboard'))
       }
     })

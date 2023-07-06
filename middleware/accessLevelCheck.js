@@ -14,7 +14,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         // Handle unauthorized access
         const handleUnauthorizedAccess = (message) => {
             console.log(message);
-            return abortNavigation();
+            return navigateTo('/');
         }
 
         // Check if user is authenticated

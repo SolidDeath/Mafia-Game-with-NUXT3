@@ -10,7 +10,9 @@ export default defineEventHandler(async (event) => {
     try {
         const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
         await auth.revokeRefreshTokens(decodedClaims.sub); // Revoke all sessions for the user
-        deleteCookie(event, 'authCookie');
+        if(sessionCookie){
+            deleteCookie(event, 'authCookie');
+        }
         return {
             statusCode: 200,
             message: 'Logout successful'
