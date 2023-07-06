@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <header>{{ header}}</header>
+      <header>{{ props.header}}</header>
   
         <form @submit.prevent>    
 
@@ -29,8 +29,9 @@
     /*
         PROPS
     */
-        defineProps({
+        const props = defineProps({
             header: String,
+            collection: String
 
         })
     /*
@@ -82,7 +83,7 @@
                 hasValue.value = true
                 wasUploaded.value = false
                 try{
-                    await uploadImage('playerIcon', file.value)
+                    await uploadImage(props.collection, file.value)
                 } catch(err) {
                     console.log(err.message)
                     fileError.value = err.message
