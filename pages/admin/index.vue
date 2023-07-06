@@ -28,6 +28,6 @@ const handleUsers = () => {
 }
 
 const handleAddRole = () => {
-  navigateTo(localPath('/admin/addRole'))
+  navigateTo(localPath('/role/Form'))
 }
 </script>
