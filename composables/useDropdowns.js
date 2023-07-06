@@ -1,3 +1,4 @@
+//TODO: Add dynamic translations to all of the objects
 const ALIGNMENT = [
     {value: 'MAFIA', name: 'Mafia'},
     {value: 'VILLAGE', name: 'Village'},
