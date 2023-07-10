@@ -33,7 +33,7 @@
                 </div>
                 <div>
                     <label for="investigation_res_alignment">{{ $t('investigation_res_alignment') }}</label>
-                    <Dropdown :options="alignmentList"  v-model="roleInfo.INVESTIGATION_RES.ALIGNMENT" name="investigation_res_alignment"/>
+                    <Dropdown :options="alignmentList"  v-model="roleInfo.INVESTIGATION_RES.ALIGNMENT" name="investigation_res_alignment"/> 
                 </div>
             </div>  
         </div>
@@ -44,14 +44,14 @@
           <RoleAction
                 v-for="(action, index) in actionArr"
             
-                :actionTitle="action.ACTION_TITLE"
-                :immediate="action.IMMEDIATE"
-                :immediateActionField="action.IMMEDIATE_ACTION_FIELD"
-                :isNightAction="action.IS_NIGHT_ACTION"
-                @update:isNightAction="value => action.IS_NIGHT_ACTION = value"
-                @update:immediateActionField="value => action.IMMEDIATE_ACTION_FIELD = value"
-                @update:immediate="value => action.IMMEDIATE = value"
-                @update:actionTitle="value => action.ACTION_TITLE = value"
+                :actionTitle="actionArr[index].ACTION_TITLE"
+                :immediate="actionArr[index].IMMEDIATE"
+                :immediateActionField="actionArr[index].IMMEDIATE_ACTION_FIELD"
+                :isNightAction="actionArr[index].IS_NIGHT_ACTION"
+                v-model:isNightAction="actionArr[index].IS_NIGHT_ACTION"
+                v-model:immediateActionField="actionArr[index].IMMEDIATE_ACTION_FIELD"
+                v-model:immediate="actionArr[index].IMMEDIATE"
+                v-model:actionTitle="actionArr[index].ACTION_TITLE"
                 @remove="() => actionArr.splice(index, 1)"
 
             />

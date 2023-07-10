@@ -39,7 +39,21 @@
     "leave": "Leave",
     "user_id": "User ID",
     "access_level": "Access levels",
-    "user_list": "User list"
+    "user_list": "User list",
+    "role_name": "Role Name",
+    "role_description": "Role Description",
+    "role_aura": "Role Aura",
+    "role_alignment": "Role Alignment",
+    "role_category": "Role Category",
+    "role_winCondition": "Role Win Condition",
+    "role_action_immediate": "Is immediate?",
+    "role_action_isNightAction": "Is night action?",
+    "can_be_killed_by_mafia": "Can be killed by mafia",
+    "can_be_multiple": "Can be multiple",
+    "investigation_responses": "Investigation responses",
+    "investigation_res_aura": "Investigation response aura",
+    "investigation_res_alignment": "Investigation response alignment",
+    "add_action": "Add action"
 
 
 }

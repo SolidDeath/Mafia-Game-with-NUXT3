@@ -39,5 +39,19 @@
     "leave": "Pamest",
     "user_id": "Lietotāja ID",
     "access_level": "Pieejas līmenis",
-    "user_list": "Lietotāji"
+    "user_list": "Lietotāji",
+    "role_name": "Lomas nosaukums",
+    "role_description": "Lomas apraksts",
+    "role_aura": "Lomas aura",
+    "role_alignment": "Lomas komanda",
+    "role_category": "Lomas kategorija",
+    "role_winCondition": "Lomas uzvaras nosacījums",
+    "role_action_immediate": "Izpildīt nekavējoties?",
+    "role_action_isNightAction": "Nakts darbība?",
+    "can_be_killed_by_mafia": "Var nogalināt mafija",
+    "can_be_multiple": "Var būt vairākas",
+    "investigation_responses": "Izmenklēšanas rezultāti",
+    "investigation_res_aura": "Izmeklējot auru",
+    "investigation_res_alignment": "Izmeklējot komandu",
+    "add_action": "Pievienot darbību"
 }
