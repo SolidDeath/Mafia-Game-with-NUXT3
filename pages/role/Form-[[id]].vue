@@ -1,4 +1,5 @@
 <template>
+    <p> {{ roleDoc }}</p>
     <form v-bind="$attrs" @submit.prevent="processForm">
         <FormGroup :label="$t('role_name')" v-model="roleInfo.ROLE_NAME" type="text"/>
         <FormGroup :label="$t('role_description')" v-model="roleInfo.ROLE_DESCRIPTION" type="text"/>
@@ -42,7 +43,8 @@
         <!-- ACTIONS -->
         <div class="actions">
           <RoleAction
-                v-for="(action, index) in actionArr"
+                v-for="(action, index) in actionArr" 
+                :key="index"
             
                 :actionTitle="actionArr[index].ACTION_TITLE"
                 :immediate="actionArr[index].IMMEDIATE"
@@ -59,6 +61,7 @@
             <Button @click="addAction">{{ $t('add_action') }}</Button>
 
         </div>
+        <Button>{{ $t("save") }}</Button>
     </form>
 </template>
 
@@ -66,15 +69,15 @@
     /*
         PROPS
     */
-        const props = defineProps({
-            roleID: String
-        })
+
+        const props = useRoute().params
+
 
     /*
         IMPORTS    
     */
         const { ALIGNMENT: alignmentList, AURA: auraList, WIN_CONDITION, CATEGORY: categoryList, ACTION: actionList} = useDropdowns()
-        const { subscribeCollection, getDocument, updateDocument,subscribeDocument } = useFirestore()
+        const { subscribeCollection, getDocument, updateDocument,subscribeDocument, getCollection } = useFirestore()
 
     /*
         GLOBAL VARIABLES
@@ -125,10 +128,10 @@
     /*
         SSR
     */
-        if(process.server && props.roleID){
-            roleDoc.value = await useFetch('../api/roles/' + props.roleID)
-            console.log(roleDoc.value);
-        }
+        // if(process.server && props.roleID){
+        //     roleDoc.value = await useFetch('../api/roles/' + props.roleID)
+        //     console.log(roleDoc.value);
+        // }
         
         watchEffect(() => {
             if(roleDoc.data){
@@ -138,15 +141,50 @@
         })
 
         onMounted(async () => {
+            console.log('roleID', props.id	);
+            if(props.id){
+                try{
+                    roleDoc.value = subscribeDocument('roles', props.id)
+                    console.log(roleDoc.value);
+                    roleInfo.ACTIONS = subscribeCollection('roles', props.id, 'actions')
+                    console.log(roleInfo.ACTIONS);
+
+                }catch(err){
+                    console.log(err);
+                }
+            }
+            else{
+                console.log('no roleID');
+            }
+            // getCollection("roles", props.roleID,'actions').then(val => //async call to get the actions from the database
+            //     {
+            //         console.log('val from getCollection', val);
+
+            //         for (let action of val) {
+            //             let actionCopy1 = JSON.parse(JSON.stringify(action));
+            //             actionArr.value.push(actionCopy1);
+                        
+            //             let actionCopy2 = JSON.parse(JSON.stringify(action));
+            //             roleInfo.ACTIONS.push(actionCopy2);
+            //         }
+            //     }
+                
+            // )
+            // Create a deep copy of the original action list
+
+
+
             // if(props.roleID){
             //     roleDoc.value = subscribeDocument('roles', props.roleID)
             // }
         })
 
         const addAction = () => {
-            actionArr.value.push(action)
+            actionArr.value.push({...action})
         }
 
-
+        const processForm = async () => {
+            //figure out which actions have changed and update those, delete the ones that are missing and add the new ones
+        }
 
 </script>
