@@ -52,44 +52,64 @@ export default function useFirestore() {
     function subscribeDocument(collectionName: string, docId?: string, subCollection?: string, subDocId?: string): Ref<null | {[key: string]: any}> {
       const result = ref(null);
       let docRef;
-      
+  
       if(subCollection && subDocId) {
-        docRef = doc(firestore, collectionName, docId as string, subCollection, subDocId);
+          docRef = doc(firestore, collectionName, docId as string, subCollection, subDocId);
       } else if(collectionName && docId) {
-        docRef = doc(firestore, collectionName, docId);
+          docRef = doc(firestore, collectionName, docId);
       } else {
-        throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+          throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
       }
-      
+  
+      let isInitialSnapshot = true;
+  
       const unsubscribe = onSnapshot(docRef, (doc) => {
-        result.value = doc.data();
+          if (isInitialSnapshot) {
+              isInitialSnapshot = false;
+              result.value = doc.data();
+          } else {
+              setTimeout(() => {
+                  result.value = doc.data();
+              }, 0);
+          }
       });
-      
+  
       onUnmounted(unsubscribe);
-      
+  
       return result;
-    }
+  }
+  
   
     function subscribeCollection(collectionName: string, docId?: string, subCollection?: string): Ref<null | {[key: string]: any}[]> {
       const results = ref([]);
       let q;
-      
+  
       if(docId && subCollection) {
-        q = query(collection(firestore, collectionName, docId, subCollection));
+          q = query(collection(firestore, collectionName, docId, subCollection));
       } else if(collectionName) {
-        q = query(collection(firestore, collectionName));
+          q = query(collection(firestore, collectionName));
       } else {
-        throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
+          throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
       }
+  
+      let isInitialSnapshot = true;
       
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        results.value = snapshot.docs.map(doc => doc.data());
+          if (isInitialSnapshot) {
+              isInitialSnapshot = false;
+              results.value = snapshot.docs.map(doc => doc.data());
+          } else {
+              setTimeout(() => {
+                  results.value = snapshot.docs.map(doc => doc.data());
+              }, 0);
+          }
       });
       
       onUnmounted(unsubscribe);
-      
+  
       return results;
-    }
+  }
+  
     
     function getDataFromFirestore(subscribe: boolean, collectionName: string, docId?: string, subCollection?: string, subDocId?: string) {
       if(subscribe) {
