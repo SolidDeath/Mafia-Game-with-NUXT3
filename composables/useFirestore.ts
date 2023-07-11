@@ -49,66 +49,72 @@ export default function useFirestore() {
       return docs;
     }
   
-    function subscribeDocument(collectionName: string, docId?: string, subCollection?: string, subDocId?: string): Ref<null | {[key: string]: any}> {
+    function subscribeDocument(collectionName: string, docId?: string, subCollection?: string, subDocId?: string): Promise<Ref<null | {[key: string]: any}>> {
       const result = ref(null);
-      let docRef;
   
-      if(subCollection && subDocId) {
-          docRef = doc(firestore, collectionName, docId as string, subCollection, subDocId);
-      } else if(collectionName && docId) {
-          docRef = doc(firestore, collectionName, docId);
-      } else {
-          throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
-      }
+      return new Promise((resolve, reject) => {
+          let docRef;
   
-      let isInitialSnapshot = true;
-  
-      const unsubscribe = onSnapshot(docRef, (doc) => {
-          if (isInitialSnapshot) {
-              isInitialSnapshot = false;
-              result.value = doc.data();
+          if(subCollection && subDocId) {
+              docRef = doc(firestore, collectionName, docId as string, subCollection, subDocId);
+          } else if(collectionName && docId) {
+              docRef = doc(firestore, collectionName, docId);
           } else {
-              setTimeout(() => {
+              reject(createError({ statusCode: 400, statusMessage: "Invalid path parameters." }));
+          }
+  
+          let isInitialSnapshot = true;
+  
+          const unsubscribe = onSnapshot(docRef, (doc) => {
+              if (isInitialSnapshot) {
+                  isInitialSnapshot = false;
                   result.value = doc.data();
-              }, 0);
-          }
+                  resolve(result);  // resolve after the first snapshot
+              } else {
+                  setTimeout(() => {
+                      result.value = doc.data();
+                  }, 0);
+              }
+          });
+  
+          onUnmounted(unsubscribe);
       });
-  
-      onUnmounted(unsubscribe);
-  
-      return result;
-  }
+    }
   
   
-    function subscribeCollection(collectionName: string, docId?: string, subCollection?: string): Ref<null | {[key: string]: any}[]> {
+  
+    function subscribeCollection(collectionName: string, docId?: string, subCollection?: string): Promise<Ref<null | {[key: string]: any}[]>> {
       const results = ref([]);
-      let q;
   
-      if(docId && subCollection) {
-          q = query(collection(firestore, collectionName, docId, subCollection));
-      } else if(collectionName) {
-          q = query(collection(firestore, collectionName));
-      } else {
-          throw createError({ statusCode: 400, statusMessage: "Invalid path parameters." });
-      }
+      return new Promise((resolve, reject) => {
+          let q;
   
-      let isInitialSnapshot = true;
-      
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-          if (isInitialSnapshot) {
-              isInitialSnapshot = false;
-              results.value = snapshot.docs.map(doc => doc.data());
+          if(docId && subCollection) {
+              q = query(collection(firestore, collectionName, docId, subCollection));
+          } else if(collectionName) {
+              q = query(collection(firestore, collectionName));
           } else {
-              setTimeout(() => {
-                  results.value = snapshot.docs.map(doc => doc.data());
-              }, 0);
+              reject(createError({ statusCode: 400, statusMessage: "Invalid path parameters." }));
           }
-      });
-      
-      onUnmounted(unsubscribe);
   
-      return results;
-  }
+          let isInitialSnapshot = true;
+  
+          const unsubscribe = onSnapshot(q, (snapshot) => {
+              if (isInitialSnapshot) {
+                  isInitialSnapshot = false;
+                  results.value = snapshot.docs.map(doc => doc.data());
+                  resolve(results);  // resolve after the first snapshot
+              } else {
+                  setTimeout(() => {
+                      results.value = snapshot.docs.map(doc => doc.data());
+                  }, 0);
+              }
+          });
+  
+          onUnmounted(unsubscribe);
+      });
+    }
+  
   
     
     function getDataFromFirestore(subscribe: boolean, collectionName: string, docId?: string, subCollection?: string, subDocId?: string) {
