@@ -1,11 +1,11 @@
 <template>
     <div class="action-row">
         <img :src="iconUrl" alt="Action Icon" class="action-icon" v-if="iconUrl" />
-        <FormGroup :label="$t('role_action_title')" @input="$emit('update:actionTitle', $event.target.value)" type="text" :value="props.actionTitle"/>
-        <FormGroup :label="$t('role_action_immediate')" @input="$emit('update:immediate', $event.target.value)" type="checkbox" :value="props.immediate"/>
-        <FormGroup :label="$t('role_action_immediateActionField')" @input="$emit('update:immediateActionField', $event.target.value)" type="text" :value="props.immediateActionField" v-if="props.immediate == true"/>
-        <FormGroup :label="$t('role_action_isNightAction')" @input:="$emit('update:isNightAction', !props.isNightAction)" type="checkbox" :value="props.isNightAction"/>
-        <UploadIcon @update:iconUrl="$emit('update:iconUrl', $event)" header="Action icon" collection="actionIcons"/>
+        <Dropdown :options="ACTION" @update:current-value="value => $emit('update:actionTitle', value)"/>
+        <FormGroup :label="$t('role_action_immediate')" @update:modelValue=" val => $emit('update:immediate', !props.immediate)" type="checkbox" :value="props.immediate"/>
+        <FormGroup :label="$t('role_action_immediateActionField')" @update:modelValue=" val => $emit('update:immediateActionField', val )" type="text" :value="props.immediateActionField" v-if="props.immediate == true"/>
+        <FormGroup :label="$t('role_action_isNightAction')" @update:modelValue=" val => $emit('update:isNightAction', !props.isNightAction)" type="checkbox" :value="props.isNightAction"/>
+        <UploadIcon @update:iconUrl=" val => $emit('update:iconUrl', val)" header="Action icon" collection="actionIcons"/>
         <Button class="material_icons" @click="$emit('remove')">minus</Button>
     
     </div>
@@ -15,8 +15,8 @@
   /*
     PROPS
   */
-    const props = defineProps({
-        actionTitle: {
+    const props = defineProps({   
+        actionTitle: {  
             type: String,
             default: ''
         },
@@ -37,7 +37,15 @@
             default: ''
         }
     })
+    const { ACTION } = useDropdowns()
+  
+    watchEffect(() => {
+      console.log(props.actionTitle);
+      console.log(props.isNightAction);
+      console.log(props.immediate);
+      console.log(props.immediateActionField);
 
+    })
 
     defineEmits([
         'update:actionTitle',
