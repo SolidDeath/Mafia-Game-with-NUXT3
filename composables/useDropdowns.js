@@ -14,7 +14,7 @@ const WIN_CONDITION = [
     {value: 'TARGET_ELIMINATED', name: 'Target eliminated'},
     {value: 'IS_LYNCHED', name: 'Lynched by village'},
     {value: 'NUMERICAL_PARITY', name: 'Numerical parity with other parties'},
-    {value: 'ZERO_ENEMIES', name: 'No enemies left'}
+    {value: 'VILLAGE', name: 'Village - no enemies'}
 ]
 
 const CATEGORY = [
