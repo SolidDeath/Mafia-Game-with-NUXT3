@@ -8,13 +8,12 @@
   
   <script setup>
   const props = defineProps({
-    currentValue: Number,
+    currentValue: Number | String,
     options: {
       type: Array,
       required: true
     },
   }) 
-  
   defineEmits(['update:currentValue'])
   
   </script>
