@@ -8,7 +8,7 @@
   
   <script setup>
   const props = defineProps({
-    currentValue: Number | String,
+    currentValue: Number | String | Boolean,
     options: {
       type: Array,
       required: true
