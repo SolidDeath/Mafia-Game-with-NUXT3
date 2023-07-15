@@ -49,7 +49,7 @@ export default function useFirestore() {
       return docs;
     }
   
-    function subscribeDocument(collectionName: string, docId?: string, subCollection?: string, subDocId?: string): Promise<Ref<null | {[key: string]: any}>> {
+    async function subscribeDocument<T>(collectionName: string, docId?: string, subCollection?: string, subDocId?: string): Promise<Ref<T | null>> {
       const result = ref(null);
   
       return new Promise((resolve, reject) => {
@@ -69,7 +69,7 @@ export default function useFirestore() {
               if (isInitialSnapshot) {
                   isInitialSnapshot = false;
                   result.value = doc.data();
-                  resolve(result);  // resolve after the first snapshot
+                  resolve(result.value);  // resolve after the first snapshot
               } else {
                   setTimeout(() => {
                       result.value = doc.data();
@@ -103,7 +103,7 @@ export default function useFirestore() {
               if (isInitialSnapshot) {
                   isInitialSnapshot = false;
                   results.value = snapshot.docs.map(doc => doc.data());
-                  resolve(results);  // resolve after the first snapshot
+                  resolve(results.value);  // resolve after the first snapshot
               } else {
                   setTimeout(() => {
                       results.value = snapshot.docs.map(doc => doc.data());
