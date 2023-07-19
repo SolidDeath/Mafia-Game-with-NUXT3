@@ -45,7 +45,7 @@
           <RoleAction
                 v-for="(action, index) in actionArr" 
                 :key="index"
-                
+
                 v-model:isNightAction="actionArr[index].IS_NIGHT_ACTION"
                 v-model:immediateActionField="actionArr[index].IMMEDIATE_ACTION_FIELD"
                 v-model:immediate="actionArr[index].IMMEDIATE"
@@ -97,11 +97,11 @@
             };
             ICON_URL: string;
         }
-    
     /*
         GLOBAL VARIABLES
     */
-   
+        
+        
         const immutableActions = ref([])
         const actionArr = ref([])
         let roleDoc = ref<RoleDocType | null>(null)
@@ -111,7 +111,8 @@
             
         // }
     
-        
+        let serverRole = useFetch("../api/roles/" + props.id)
+        console.log('ServerRole',serverRole);
         
         const action = {
             ACTION_TITLE: '',
@@ -121,6 +122,29 @@
             IMMEDIATE_ACTION_FIELD: '' //The field that is toggled if the action is immediate
         }
         
+    
+    /*
+        DATA USING SERVER API
+    */
+
+    // const roleValues = ref({
+    //     ROLE_NAME = roleDoc.value.ROLE_NAME,
+    //     ROLE_DESCRIPTION: string,
+    //     AURA: string,
+    //     ALIGNMENT: string,
+    //     CATEGORY: string,
+    //     WIN_CONDITION: string,
+    //     HAS_NIGHT_ACTION: boolean,
+    //     HAS_DAY_ACTION: boolean,
+    //     CAN_BE_KILLED_BY_MAFIA: boolean,
+    //     CAN_BE_MULTIPLE: boolean,
+    //     INVESTIGATION_RES: {
+    //         AURA: string,
+    //         ALIGNMENT: string,
+    //     },
+    //     ICON_URL: string,
+    // })
+
    
     /*
         COMPUTED PROPERTIES

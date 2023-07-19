@@ -18,34 +18,29 @@
     const props = defineProps({   
         actionTitle: {  
             type: String,
-            default: ''
         },
         iconUrl: {
             type: String,
-            default: ''
         },
         isNightAction: {
             type: Boolean,
-            default: true
         },
         immediate: {
             type: Boolean,
-            default: false
         },
         immediateActionField: {
             type: String,
-            default: ''
         }
     })
     const { ACTION } = useDropdowns()
   
-    watchEffect(() => {
-      console.log(props.actionTitle);
-      console.log(props.isNightAction);
-      console.log(props.immediate);
-      console.log(props.immediateActionField);
+    // watchEffect(() => {
+    //   console.log(props.actionTitle);
+    //   console.log(props.isNightAction);
+    //   console.log(props.immediate);
+    //   console.log(props.immediateActionField);
 
-    })
+    // })
 
     defineEmits([
         'update:actionTitle',
