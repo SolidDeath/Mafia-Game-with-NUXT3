@@ -12,7 +12,8 @@
   </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
+
 
 const { subscribeCollection, getDocument, updateDocument } = useFirestore()
 /*
@@ -24,18 +25,43 @@ const { subscribeCollection, getDocument, updateDocument } = useFirestore()
     iconUrl: "",
     id: ""
   })
-  const icons = ref([])
+  const icons = ref<IconObj[]> ([])
   const user = ref({})
   const isPending = ref(false)
   const showError = ref("")
   const button = ref('Save')	
+
+  /*
+    TYPES
+  */
+
+  interface TimestampType {
+    nanoseconds: Number
+    seconds: Number
+  }
+  interface IconObj {
+    filepath: string
+    iconUrl: String
+    createdAt: TimestampType
+  }
+
   onMounted(async() => {
-    /*
+  
+  
+  /*
     HYDRATION FROM CLIENT SIDE
-    */
-   icons.value  = subscribeCollection("playerIcons")
-   
+  */
+
+
+   icons.value  =  await subscribeCollection("playerIcons")
+    
     watchEffect(() => {
+      console.log(icons.value)
+      let tempIcons = icons.value
+
+      tempIcons.forEach((value, index, array) => {
+        console.log(value.iconUrl, index);
+      })
       button.value = isPending.value ? 'Saving...' : 'Save'
     })
 
@@ -50,6 +76,10 @@ const { subscribeCollection, getDocument, updateDocument } = useFirestore()
 
   })
 
+  
+  /*
+    HELPER FUNCTIONS
+  */
   const checkSpecialChars = (input) => {
     const specialChars = /^[a-zA-Z]+$/; //check if input contains any special symbols
     return specialChars.test(input)
