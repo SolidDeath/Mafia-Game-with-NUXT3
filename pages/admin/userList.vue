@@ -1,6 +1,8 @@
 <template>
     <NuxtLayout name="dashboardlayout">
-        <User v-for="user in users.data" :displayName="user.displayName" :accessLevel="user.accessLevel" :email="user.email" :userIcon="user.iconUrl" :userId="user.uid" :id="user.uid"/>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <User v-for="user in users.data" :displayName="user.displayName" :accessLevel="user.accessLevel" :email="user.email" :userIcon="user.iconUrl" :userId="user.uid" :id="user.uid"/>
+        </div>
     </NuxtLayout>
 </template>
 
@@ -19,7 +21,7 @@
     const isPending = ref(false)
 
     // Client side hydration
-    onMounted(() => {
-        users.value.data = subscribeCollection("users") 
+    onMounted(async () => {
+        users.value.data = await subscribeCollection("users") 
     })
 </script>
