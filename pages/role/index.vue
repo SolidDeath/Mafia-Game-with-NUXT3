@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="dashboardlayout">
-    <div class="max-w-150 w-full p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-auto gap-y-8 items-center justify-items-center">
+    <div class="max-w-150 w-full p-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-auto gap-y-8 items-center justify-items-center">
         <RoleCard v-if="roles" @click="handleRoleShow(role)" v-for="role in roles" :iconLink="role.iconUrl" :name="role.title" :id="role.title"/>
     </div>
     <RoleModal @closeModal="handleRoleHide" v-show="showRoleInfo" v-bind="roleContent"/>
