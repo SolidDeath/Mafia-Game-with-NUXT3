@@ -14,11 +14,11 @@ function validateEmail(email: string) {
 }
 
 function validatePassword(password: string) {
-  const passwordSchema = z.string().min(6);
+  const passwordSchema = z.string().min(8);
   try {
     return { flag: true, password: passwordSchema.parse(password) };
   } catch (err) {
-    return { flag: false, password: (err instanceof ZodError) ? err.issues[0].message : undefined };
+    return { flag: false, password: (err instanceof ZodError) ? "The password must be at least 8 characters long" : undefined };
   }
 }
 
@@ -27,6 +27,6 @@ function validateUsername(name: string) {
   try {
     return { flag: true, name: usernameSchema.parse(name) };
   } catch (err) {
-    return { flag: false, name: (err instanceof ZodError) ? err.issues[0].message : undefined };
+    return { flag: false, name: (err instanceof ZodError) ? "Username must NOT be empty and longer than 3 symbols" : undefined };
   }
 }
