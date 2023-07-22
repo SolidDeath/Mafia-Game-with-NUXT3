@@ -1,7 +1,7 @@
 <template>
     <div class="w-full bg-background border border-deep rounded outline-none transition-all duration-150 ease-in-out flex items-center">
       <input v-bind="$attrs" v-model="inputValue" class="flex-grow bg-background text-gray-400 outline-none px-2" autocomplete="off" disabled/>
-      <button @click="copyCode" class=" bg-crimson text-white rounded px-2 py-2">
+      <button @click.prevent="copyCode" class=" bg-crimson text-white rounded px-2 py-2">
         <span class="material-icons align-middle">{{ buttonText }}</span>
       </button>
     </div>
