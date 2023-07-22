@@ -34,7 +34,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
     const { USER_TYPES: userTypes } = useDropdowns()
     const { updateDocument } = useFirestore()
     const showError = ref("")
@@ -63,7 +63,7 @@
     })
 
     watchEffect(() => {
-        if(isPending == true){
+        if(isPending.value == true){
             buttonValue.value = 'saving'
         }
         else{
