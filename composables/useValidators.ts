@@ -4,6 +4,12 @@ export function useValidators(){
   return {validateEmail, validatePassword, validateUsername}
 }
 
+const errorMessages = {
+  email: "",
+  password: "The password must be at least 8 characters long",
+  username: "Username must NOT be empty and longer than 3 symbols"
+}
+
 function validateEmail(email: string) {
   const emailSchema = z.string().email();
   try {
@@ -18,7 +24,7 @@ function validatePassword(password: string) {
   try {
     return { flag: true, password: passwordSchema.parse(password) };
   } catch (err) {
-    return { flag: false, password: (err instanceof ZodError) ? "The password must be at least 8 characters long" : undefined };
+    return { flag: false, password: (err instanceof ZodError) ? errorMessages.username : undefined };
   }
 }
 
@@ -27,6 +33,6 @@ function validateUsername(name: string) {
   try {
     return { flag: true, name: usernameSchema.parse(name) };
   } catch (err) {
-    return { flag: false, name: (err instanceof ZodError) ? "Username must NOT be empty and longer than 3 symbols" : undefined };
+    return { flag: false, name: (err instanceof ZodError) ? errorMessages.username : undefined };
   }
 }
