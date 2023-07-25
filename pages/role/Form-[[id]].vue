@@ -6,7 +6,7 @@
 
         <div>
             <label for="role_aura">{{ $t('role_aura') }}</label>
-            <Dropdown name="role_aura" :options="auraList"  v-model="aura"/>
+            <Dropdown name="role_aura" :options="auraList"  v-model="auraReactive"/>
         </div>
         <div>
             <label for="role_alignment">{{ $t('role_alignment') }}</label>
@@ -67,7 +67,8 @@
         PROPS
     */
         const props = useRoute().params
-   
+        console.log("Props: ", props.id);
+        
    
     /*
         IMPORTS    
@@ -111,8 +112,8 @@
             
         // }
     
-        let serverRole = useFetch("../api/roles/" + props.id)
-        console.log('ServerRole',serverRole);
+        let serverRole = await useFetch("../api/firestore/roles/" + props.id)
+        console.log('ServerRole', serverRole);
         
         const action = {
             ACTION_TITLE: '',
@@ -144,7 +145,10 @@
     //     },
     //     ICON_URL: string,
     // })
-
+        watchEffect(() => {
+            console.log("Roledoc.value: ", serverRole.value);
+            
+        })
    
     /*
         COMPUTED PROPERTIES
@@ -159,9 +163,12 @@
             set: (val) => { if(roleDoc.value) roleDoc.value.ROLE_DESCRIPTION = val }
         });
 
-        const aura = computed({
+        const auraReactive = computed({
             get: () => roleDoc.value?.AURA,
-            set: (val) => { if(roleDoc.value) roleDoc.value.AURA = val }
+            set: (val) => {
+                roleDoc.value.AURA = val
+                console.log(roleDoc.value.AURA);
+            } 
         });
 
         const alignment = computed({
@@ -215,18 +222,18 @@
         });
 
         watchEffect(() => {
-            console.log(roleName.value);
-            console.log(canBeKilledByMafia.value);
-            console.log(aura.value);
-            console.log(alignment.value);
-            console.log(category.value);
-            console.log(winCondition.value);
-            console.log(hasNightAction.value);
-            console.log(hasDayAction.value);
-            console.log(canBeMultiple.value);
-            console.log(investigationResAura.value);
-            console.log(investigationResAlignment.value);
-            console.log(iconURL.value);
+            // console.log(roleName);
+            // console.log(canBeKilledByMafia);
+            // console.log(aura);
+            // console.log(alignment);
+            // console.log(category);
+            // console.log(winCondition);
+            // console.log(hasNightAction);
+            // console.log(hasDayAction);
+            // console.log(canBeMultiple);
+            // console.log(investigationResAura);
+            // console.log(investigationResAlignment);
+            // console.log(iconURL);
 
             
             
@@ -257,15 +264,7 @@
             console.log('roleID', props.id	);
             if(props.id){
                 try{
-                    roleDoc.value = await subscribeDocument<RoleDocType>('roles', props.id)
-                    console.log('roleDoc', roleDoc.value);
                     
-                    console.log('Aura List:', auraList);
-    
-
-
-
-
                     // roleDoc.ACTIONS = await subscribeCollection('roles', props.id, 'actions')
                     
                     // console.log(roleDoc.ACTIONS);
