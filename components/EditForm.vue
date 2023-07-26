@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+
 /*
   TYPES
 */
@@ -45,6 +46,7 @@
 */
 
   const { subscribeCollection, getDocument, updateDocument } = useFirestore()
+
 /*
   VARIABLES
 */
@@ -63,9 +65,9 @@
   const button = ref('Save')	
   const successMessage = ref(null)
 
-  /*
-    Server side data fetching
-  */
+/*
+  Server side data fetching
+*/
 
   let serverIcons = await useFetch("../api/firestore/playerIcons")
   icons.value = serverIcons.data.value as IconObj[]
@@ -73,19 +75,15 @@
   
 
   onMounted(async() => {
-    
-    
   /*
     HYDRATION FROM CLIENT SIDE
   */
 
-   
-
- subscribeCollection("playerIcons").then((iconsData) => {
-    
-    icons.value = iconsData as IconObj[]
-    
- })
+    subscribeCollection("playerIcons").then((iconsData) => {
+        
+        icons.value = iconsData as IconObj[]
+        
+    })
    
     watchEffect(() => {
       button.value = isPending.value ? 'Saving...' : 'Save'
