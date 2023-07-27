@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     const {app} = useFirebaseServer() // initialize firebase app on server
     const { token } = await readBody(event)
     const auth = getAuth()
-    const expiresIn = 60 * 60 * 24 * 5 * 100 // 5 days
+    const expiresIn = 60 * 60 * 24 * 1 * 100 // 5 days
 
     
     /*
