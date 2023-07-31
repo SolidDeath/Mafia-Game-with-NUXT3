@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   i18n: { //i18n module options
     lazy: true, //enable lazy loading
     langDir: 'locales/', //directory where language files (locales) are stored
-    strategy: 'prefix', //strategy for choosing locale
+    strategy: 'no_prefix', //strategy for choosing locale
     locales: [
       {
         code: 'EN',
