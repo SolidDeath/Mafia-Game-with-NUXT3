@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
     // Fetches the document data
     const docSnapshot = await docRef.get();
-
+    console.log("docSnapshot", docSnapshot);
     // Checks if the document exists and returns its data
     if (docSnapshot.exists) {
         let data = { ...docSnapshot.data(), id: docSnapshot.id };
