@@ -121,9 +121,9 @@
         let serverRole = await useFetch("/api/firestore/roles/" + props.id)
         console.log('This is the server role: ',serverRole);
         
-        let serverActions = await useFetch('../api/firestore/roles/' + props.id + "actions")
+        let serverActions = await useFetch('/api/firestore/roles/' + props.id + "/actions")
         console.log('ServerRole', serverRole);
-        console.log('ServerActions',serverActions.data);
+        console.log('ServerActions',serverActions.data.value);
         
         roleDoc.value = {...serverRole}
         // console.log(roleDoc)
